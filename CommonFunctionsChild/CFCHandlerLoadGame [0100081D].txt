@@ -1,0 +1,7 @@
+scn CFCHandlerLoadGame
+
+string_var svSaveFileName
+
+begin Function { svSaveFileName }
+Call SetCFLocalData OKLastLoadedSaveFileName (&svSaveFileName)
+end

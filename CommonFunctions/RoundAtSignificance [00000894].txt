@@ -1,0 +1,21 @@
+scn RoundAtSignificance
+
+;Example
+; (Call RoundAtSignificance 54.21467 3) == 54.215
+
+float fFloat
+short iSignificance
+
+float fTemp
+
+begin Function { fFloat iSignificance }
+let fTemp := 10^iSignificance
+let fFloat *= fTemp
+if fFloat - floor fFloat < 0.5
+	SetFunctionValue ((floor fFloat)/fTemp)
+	return
+else
+	SetFunctionValue ((ceil fFloat)/fTemp)
+	return
+endif
+end

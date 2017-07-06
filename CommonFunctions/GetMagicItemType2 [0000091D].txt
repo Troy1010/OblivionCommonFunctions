@@ -1,0 +1,60 @@
+scn GetMagicItemType2
+
+;0-Not a MagicItem
+;1-Spell
+;2-Disease
+;3-Power
+;4-LesserPower
+;5-Ability
+;6-PoisonSpell
+;7-ScrollEnchant
+;8-StaffEnchant
+;9-WeaponEnchant
+;10-ApparelEnchant
+;11-PotionEffect/PoisonEffect
+;12-IngredientEffect
+
+;*Does not return GetMagicItemType equivalent values.
+; (MagicItem and EffectItem are synonyms)
+
+ref rMagicItem
+
+short sGroupIndex
+short sSubgroupIndex
+
+Begin _Function { rMagicItem }
+let sGroupIndex := (GetMagicItemType rMagicItem)
+if eval sGroupIndex ==0
+	SetFunctionValue 0
+elseif eval sGroupIndex ==1
+	let sSubgroupIndex := (GetSpellType rMagicItem)
+	if eval sSubgroupIndex ==0
+		SetFunctionValue 1
+	elseif eval sSubgroupIndex ==1
+		SetFunctionValue 2
+	elseif eval sSubgroupIndex ==2
+		SetFunctionValue 3
+	elseif eval sSubgroupIndex ==3
+		SetFunctionValue 4
+	elseif eval sSubgroupIndex ==4
+		SetFunctionValue 5
+	elseif eval sSubgroupIndex ==5
+		SetFunctionValue 6
+	endif
+elseif eval sGroupIndex ==2
+	let sSubgroupIndex := (GetSpellType rMagicItem)
+	if eval sSubgroupIndex ==0
+		SetFunctionValue 7
+	elseif eval sSubgroupIndex ==1
+		SetFunctionValue 8
+	elseif eval sSubgroupIndex ==2
+		SetFunctionValue 9
+	elseif eval sSubgroupIndex ==3
+		SetFunctionValue 10
+	endif
+elseif eval sGroupIndex ==3
+	SetFunctionValue 11
+elseif eval sGroupIndex ==4
+	SetFunctionValue 12
+endif
+end

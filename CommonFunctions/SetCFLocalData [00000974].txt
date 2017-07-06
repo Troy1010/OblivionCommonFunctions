@@ -1,0 +1,30 @@
+scn SetCFLocalData
+
+;This function allows child mods to set local data in CommonFunctions.
+;It takes an okObjectKey argument to prevent conflicts.
+;*Any object can serve as the okObjectKey
+;*LocalData is reset every time the game is started.
+
+ref okObjectKey
+array_var aVariables
+
+short iIndex
+
+Begin _Function { okObjectKey aVariables }
+; Filter
+if eval (TypeOf aVariables) != "Array"
+	Call CFDebug 2 "SetCFLocalData recieved an invalid aVariables."
+	return
+endif
+
+let iIndex := -1
+While (iIndex+=1) < ar_Size aVariables
+	; Filter
+	if eval !Call IsInCollection (&(TypeOf aVariables[iIndex])) ar_List "String","Number","Form"
+		Call CFDebug 2 "SetCFLocalData recieved an aVariables with an invalid value."
+		continue
+	endif
+	
+	SetModLocalData (GetFormIDString okObjectKey)+$iIndex aVariables[iIndex]
+loop
+end

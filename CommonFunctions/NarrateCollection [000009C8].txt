@@ -1,0 +1,32 @@
+scn NarrateCollection
+
+array_var cCollection
+
+short bDoOnce
+array_var Iter
+string_var svReturning
+
+Begin _Function {cCollection}
+; Filter
+if eval !cCollection
+	SetFunctionValue "<Collection(Unconstructed)>"
+	return
+elseif eval !(ar_Size cCollection)
+	SetFunctionValue "<Collection(Empty)>"
+	return
+endif
+;
+ForEach Iter <- cCollection
+	if eval !bDoOnce
+		let bDoOnce := 1
+	else
+		let svReturning := svReturning+"%r"
+	endif
+	let CF.iNarrateCollectionRecursionLevel+=1
+	let svReturning := svReturning+(Call zCFzIndent (CF.iNarrateCollectionRecursionLevel))+$Iter["Key"]+":"+Call Narrate Iter
+	let CF.iNarrateCollectionRecursionLevel-=1
+Loop
+SetFunctionValue svReturning
+; Close
+sv_Destruct svReturning
+end

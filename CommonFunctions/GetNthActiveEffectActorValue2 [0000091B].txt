@@ -1,0 +1,41 @@
+scn GetNthActiveEffectActorValue2
+
+ref rActor ;rActor. (Pass a null reference to use calling object)
+short sActiveEffectIndex
+
+short avcReturning ;-1 represents the inability to retrieve an avc.
+long lESC ;EffectSettingCode
+
+begin _Function { rActor sActiveEffectIndex }
+if eval rActor
+	SetFunctionValue -1
+	let lESC := Call GetNthActiveEffectCode2 rActor sActiveEffectIndex
+	if eval (avcReturning := GetNthEffectItemActorValue (rActor.GetNthActiveEffectMagicItem sActiveEffectIndex) (rActor.GetNthActiveEffectMagicItemIndex sActiveEffectIndex)) <= 71
+		;^This is favorable to GetNthActiveEffectActorValue because even if the MEC's handler has been replaced, it is still able to retrieve the previously assocaited AV.
+		;^This will work when the MEC hosts multiple AVs.
+		SetFunctionValue avcReturning
+	elseif eval (avcReturning := GetMagicEffectOtherActorValueC lESC) <= 71
+		;^This will work when the ME has only a single associated AV.
+		SetFunctionValue avcReturning
+	elseif eval Call IsWithinRange 0 (avcReturning := Call DispatchEventWithIReturning zEVENTEffectSettingActorValueUnresolved ar_Map "lESC"::lESC) 71
+		;^This will work when the ME's ModAV handler has been replaced so there is no alloted space for
+		; an associated AV, but a child mod wants to pass one anyway.
+		SetFunctionValue avcReturning
+	endif
+else
+	SetFunctionValue -1
+	let lESC := Call GetNthActiveEffectCode2 SB.rNull sActiveEffectIndex
+	if eval (avcReturning := GetNthEffectItemActorValue (GetNthActiveEffectMagicItem sActiveEffectIndex) (GetNthActiveEffectMagicItemIndex sActiveEffectIndex)) <= 71
+		;^This is favorable to GetNthActiveEffectActorValue because even if the MEC's handler has been replaced, it is still able to retrieve the previously assocaited AV.
+		;^This will work when the MEC hosts multiple AVs.
+		SetFunctionValue avcReturning
+	elseif eval (avcReturning := GetMagicEffectOtherActorValueC lESC) <= 71
+		;^This will work when the ME has only a single associated AV.
+		SetFunctionValue avcReturning
+	elseif eval Call IsWithinRange 0 (avcReturning := Call DispatchEventWithIReturning zEVENTEffectSettingActorValueUnresolved ar_Map "lESC"::lESC) 71
+		;^This will work when the ME's ModAV handler has been replaced so there is no alloted space for
+		; an associated AV, but a child mod wants to pass one anyway.
+		SetFunctionValue avcReturning
+	endif
+endif
+end

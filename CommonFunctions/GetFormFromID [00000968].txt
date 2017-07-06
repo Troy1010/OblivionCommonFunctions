@@ -1,0 +1,25 @@
+scn GetFormFromID
+
+;This function retrieves a form from a string of the form's FormID.
+
+string_var svObjectID
+
+short sModIndex
+string_var svModName
+
+begin _Function { svObjectID }
+; Filter
+if eval (sv_Length svObjectID) != 8
+	Call CFDebug 2 "ERROR. svObjectID length was not 8. Called by "+(GetFormIDString GetCallingScript)
+	return
+endif
+
+let sModIndex := ToNumber svObjectID[0:1] 1
+if eval sModIndex ==255 ;(temporary reference)
+	let svModName := "NONE" ;Accepted by GetFormFromMod
+else
+	let svModName := GetNthModName sModIndex
+endif
+SetFunctionValue GetFormFromMod svModName svObjectID
+sv_Destruct svModName
+end

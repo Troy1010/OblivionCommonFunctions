@@ -1,0 +1,17 @@
+scn zCFInit
+
+;INI load is done within CFC
+
+begin _Function { }
+if eval Call InitPostLoad0
+	; Construct Arrays
+	let CF.STREAMDoOnce := Call StandardFormMapInit CF.STREAMDoOnce 0
+	let CF.LISTDoOncePerFrame := Call StandardFormMapInit CF.LISTDoOncePerFrame 2
+	let CF.RAWSTREAMDeathRowRefs := Call StandardFormMapInit CF.RAWSTREAMDeathRowRefs 1
+	let SB.LISTFloodingEvents := Call StandardFormMapInit SB.LISTFloodingEvents 2
+	let CF.qfmControls := Call StandardFormMapInit CF.qfmControls 6
+elseif eval Call InitPostLoad2
+	; Register Flooding Events
+	let SB.LISTFloodingEvents[GetFormIDString EVENTQuasiStartOfFrame] := 1
+endif
+end

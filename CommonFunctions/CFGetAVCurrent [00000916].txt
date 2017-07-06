@@ -1,0 +1,26 @@
+scn CFGetAVCurrent
+;What GetAV *should* be, according to Common Functions
+;Returns what value the av is with every modifier included.
+
+ref rTarget
+short avc
+
+begin _Function { rTarget avc }
+if eval rTarget
+	if eval avc == avcDefendBonus
+		SetFunctionValue rTarget.GetArmorRating
+	elseif eval avc == avcEncumbrance
+		SetFunctionValue -(rTarget.GetAV avcStrength)*(GetGameSetting "FActorStrengthEncumbranceMult")+(rTarget.GetAV avc)
+	else
+		SetFunctionValue rTarget.GetAV avc
+	endif
+else
+	if eval avc == avcDefendBonus
+		SetFunctionValue GetArmorRating
+	elseif eval avc == avcEncumbrance
+		SetFunctionValue -(GetAV avcStrength)*(GetGameSetting "FActorStrengthEncumbranceMult")+(GetAV avc)
+	else
+		SetFunctionValue GetAV avc
+	endif
+endif
+end

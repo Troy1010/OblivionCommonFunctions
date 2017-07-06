@@ -1,0 +1,6 @@
+scn CFCHandlerCloseControlMenu
+
+short iMenuID
+
+Begin _Function { iMenuID }
+end

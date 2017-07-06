@@ -1,0 +1,48 @@
+scn SetPosComplete
+
+;This function is meant to be used with GetPosComplete.
+
+ref rActor
+array_var aPosition ;aPosition. 0::xPos 1::yPos 2::zPos 3::fAngle(Degrees. -1 for default) 4::rParentCell
+
+begin _Function { rActor aPosition }
+; Open
+if eval (ar_Size aPosition) < 3
+	Call CFDebug 2 "SetPosComplete`Recieved invalid aPosition"
+	return
+endif
+if eval !TestExpr aPosition[3]
+	let aPosition[3] := rActor.GetAngle "Z"
+elseif eval aPosition[3] == -1
+	let aPosition[3] := rActor.GetAngle "Z"
+endif
+if eval !TestExpr aPosition[4]
+	let aPosition[4] := rActor.GetParentCell
+endif
+
+if eval (aPosition[4] == rActor.GetParentCell) || (aPosition[4] == rActor.GetParentWorldspace)
+	if eval Call CFDebugIsLevelMet 5
+		Call CFDebug 5 "SetPosComplete`Using SetPos"
+	endif
+	rActor.SetPos "x" aPosition[0]
+	rActor.SetPos "y" aPosition[1]
+	rActor.SetPos "z" aPosition[2]
+	rActor.SetAngle "z" aPosition[3]
+elseif eval (GetObjectType aPosition[4]) == 48	;Cell
+	if eval Call CFDebugIsLevelMet 5
+		Call CFDebug 5 "SetPosComplete`Using PositionCell"
+	endif
+	let aPosition[3] *= 0.01745 ;Convert from degrees to radians as PositionCell requires
+	rActor.PositionCell aPosition[0] aPosition[1] aPosition[2] aPosition[3] aPosition[4]
+elseif eval (GetObjectType aPosition[4]) == 53	;Worldspace
+	if eval Call CFDebugIsLevelMet 5
+		Call CFDebug 5 "SetPosComplete`Using PositionWorld"
+	endif
+	let aPosition[3] *= 0.01745 ;Convert from degrees to radians as PositionCell requires
+	rActor.PositionWorld aPosition[0] aPosition[1] aPosition[2] aPosition[3] aPosition[4]
+else
+	if eval Call CFDebugIsLevelMet 2
+		Call CFDebug 2 "SetPosComplete`Received invalid rCell"
+	endif
+endif
+end

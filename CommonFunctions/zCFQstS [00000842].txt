@@ -1,0 +1,73 @@
+scn zCFQstS ;Common Functions Quest Script
+
+; CFDebug
+short bConScribeInstalled
+array_var aDebugIndentLevels
+;Options
+array_var aDebugThresholds
+short iMasterDebugThreshold
+
+; Narration
+int iNarrateCollectionRecursionLevel
+;Options
+short bExtendFormNarration
+
+; Initiations
+short iInitiationIndex
+short bCallingOnStartInitiations
+short bCallingMainMenuInitiations
+short bCallingPostLoadInitiations
+short bCallingInGameInitiations
+
+; DoOnce
+array_var STREAMDoOnce
+array_var LISTDoOncePerFrame
+
+; DeleteReference2
+array_var RAWSTREAMDeathRowRefs
+
+; MsgBowWithHandler
+ref rMsgBoxHandler
+
+; Mandatory Debug (in this quest)
+short iMandatoryDebugStage
+short iButtonPressed
+float fQuestDelayTime
+short bOBSEFlag
+
+; Controls
+short bAllowCFFunctionsToEditKeyDisableStates
+array_var qfmControls
+
+
+;This quest mainly exists to store variables.
+;This block warns about missing dependencies that prevent traditional debugging.
+Begin MenuMode
+if iMandatoryDebugStage==0
+	set iMandatoryDebugStage to 1
+	set fQuestDelayTime to 0.001
+else
+	if bOBSEFlag==0
+		if iMandatoryDebugStage ==1
+			set iMandatoryDebugStage to 2
+			MessageBox "CFMandatoryError|Missing Dependency: OBSE v0021."
+		endif
+	elseif GetWeight zzCFChildFlag ==0
+		if iMandatoryDebugStage ==1
+			set iMandatoryDebugStage to 2
+			MessageBox "CFMandatoryError|CommonFunctionsChild.esp is not activated." "Continue" "Quit"
+		else
+			set iButtonPressed to GetButtonPressed
+			if iButtonPressed ==0 ;0:Continue
+				StopQuest CF
+				StopQuest zCFQstHelper
+			elseif iButtonPressed ==1 ;1:Quit
+				set zCFQstHelper.bQuit to 1
+			endif
+		endif
+	else
+		StopQuest CF
+		StopQuest zCFQstHelper
+	endif
+endif
+end

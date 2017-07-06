@@ -1,0 +1,18 @@
+scn SetPos2
+
+ref rActor
+float xPos
+float yPos
+float zPos
+
+begin Function { rActor xPos yPos zPos }
+if eval rActor
+	rActor.SetPos x xPos
+	rActor.SetPos y yPos
+	rActor.SetPos z zPos
+else
+	SetPos x xPos
+	SetPos y yPos
+	SetPos z zPos
+endif
+end

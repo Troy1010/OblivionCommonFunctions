@@ -1,0 +1,20 @@
+scn CFCHandlerCellChanged
+
+array_var aArgs
+
+array_var Iter
+ref rRefToDelete
+
+begin _Function { aArgs }
+; If any refs on DeathRow have been loaded into ActiveMemory, delete them.
+ForEach Iter <- ar_Copy CF.RAWSTREAMDeathRowRefs
+	let rRefToDelete := Call GetFormFromID Iter["Key"]
+	if eval IsFormValid rRefToDelete
+		Call DeleteReference2 rRefToDelete
+		ar_Erase CF.RAWSTREAMDeathRowRefs (GetFormIDString rRefToDelete)
+	elseif eval GameDaysPassed - Iter["Value"] >= (1+GetGameSetting "iHoursToRespawnCell")/24
+		;Ref's cell has been reset. It no longer exists.
+		ar_Erase CF.RAWSTREAMDeathRowRefs (GetFormIDString rRefToDelete)
+	endif
+loop
+end

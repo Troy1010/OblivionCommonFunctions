@@ -1,0 +1,27 @@
+scn DispatchEventWithPrimaryHandler
+
+;This function uses QH2, so okEvent must not be an in-game object.
+;The PrimaryHandler is expected to accept the rEventHandler and smVariables.
+;The PrimaryHandler can return 1(call EventHandler) or 0(don't call EventHandler).
+
+ref okEvent ;okEvent. (ObjectKey)Event
+ref rPrimaryHandler
+array_var smVariables
+
+long iQH
+array_var Iter
+
+begin Function { okEvent rPrimaryHandler smVariables }
+; Open
+let iQH := Call QH2 okEvent
+; Filter
+if eval Call zCFzFnFilterDispatchEvent okEvent iQH smVariables
+	return
+endif
+; Dispatch
+ForEach Iter <- SB.nfmEvents[GetSourceModIndex okEvent][iQH]
+	if eval Call rPrimaryHandler Iter["Value"] smVariables
+		Call Iter["Value"] smVariables
+	endif
+loop
+end

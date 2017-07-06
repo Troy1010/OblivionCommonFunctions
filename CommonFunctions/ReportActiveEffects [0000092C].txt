@@ -1,0 +1,32 @@
+scn ReportActiveEffects
+
+ref rTarget
+short sActiveEffectIndex
+
+long lESC ;EffectSettingCode
+ref rES ;EffectSetting
+short avc
+ref rMagicItem
+ref rCaster
+
+begin _Function { rTarget }
+if eval !rTarget
+	let rTarget := Call GetSelf2
+	if eval !rTarget
+		return
+	endif
+endif
+let sActiveEffectIndex := -1
+printc "CF ReportActiveEffects: Reporting AEs for %n(%i)" rTarget rTarget
+While (sActiveEffectIndex+=1)<(rTarget.GetActiveEffectCount)
+	let lESC := GetNthActiveEffectCode sActiveEffectIndex
+	let rES := MagicEffectFromCode lESC
+	let avc := (Call GetNthActiveEffectActorValue2 SB.rNull sActiveEffectIndex)
+	let rCaster := (GetNthActiveEffectCaster sActiveEffectIndex)
+	let rMagicItem := (GetNthActiveEffectMagicItem sActiveEffectIndex)
+	printc "--"
+	printc "CF ReportActiveEffects: ( " + $sActiveEffectIndex + " ):: rEffectSetting:%i lEffectSettingCode:%f"  rES lESC
+	printc "CF ReportActiveEffects: ( " + $sActiveEffectIndex + " ):: sAVC:"+$avc+" sMagnitude:"+$(GetNthActiveEffectMagnitude sActiveEffectIndex)+" Duration:"+$(GetNthActiveEffectDuration sActiveEffectIndex)
+	printc "CF ReportActiveEffects: ( " + $sActiveEffectIndex + " ):: rCaster:%i rMagicItem:%i" rCaster rMagicitem
+loop
+end

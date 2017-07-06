@@ -1,0 +1,11 @@
+scn CFDebugShiftIndentLevel
+
+short iShiftAmount
+
+begin _Function { iShiftAmount }
+let CF.aDebugIndentLevels[GetSourceModIndex GetCallingScript] += iShiftAmount
+if eval CF.aDebugIndentLevels[GetSourceModIndex GetCallingScript] < 0
+	Call CFDebug2 2 0 "CFDebugShiftIndentLevel|CF.aDebugIndentLevels["+(GetSourceModIndex GetCallingScript)+"] was modified to below 0."
+	let CF.aDebugIndentLevels[GetSourceModIndex GetCallingScript] := 0
+endif
+end

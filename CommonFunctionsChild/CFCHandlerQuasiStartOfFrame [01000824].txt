@@ -1,0 +1,8 @@
+scn CFCHandlerQuasiStartOfFrame
+
+array_var aArgs
+
+begin Function { aArgs }
+; DoOncePerFrame
+let CF.LISTDoOncePerFrame := ar_Construct "stringmap"
+end

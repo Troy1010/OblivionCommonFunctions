@@ -1,0 +1,51 @@
+scn zCFzFnDebug
+;Common Function Debug Method.
+
+short iDebugLevel ;iDebugLevel. -1:BypassFilter 0:Ignore 1:Important 2:Limited 3:Fun 4:SemiVerbose 5:Verbose 6:Flooding
+string_var svText
+short iIndentLength
+ref rCallingScript
+
+string_var svLogName
+
+begin _Function { iDebugLevel iIndentLength svText rCallingScript }
+; Filter
+if eval iDebugLevel ==0
+	return
+elseif eval iDebugLevel !=-1
+	if eval !Call zCFzFnDebugIsLevelMet iDebugLevel rCallingScript
+		return
+	endif
+endif
+; Prepend svText
+if eval iDebugLevel==5
+	let svText := "   "+svText
+elseif eval iDebugLevel==6
+	let svText := "      "+svText
+endif
+While (iIndentLength-=1)>=0
+	let svText := "-"+svText
+loop
+let svText := "CF`"+(GetFormIDString rCallingScript)+"`"+svText
+; Print to Console. Trigger Messagebox
+printc svText
+if eval iDebugLevel==1
+	Call MsgBoxWithHandler zCFMsgBoxHandlerDebug ar_List svText "Continue" "Quit"
+endif
+; Scribe to logs.
+if eval CF.bConScribeInstalled
+	; Scribe to DefaultLog
+	RegisterLog "CFDefaultLog"
+	Scribe svText+"|CFDefaultLog"
+	; Scribe to ModLog
+	let svLogName := GetNthModName (GetSourceModIndex rCallingScript)
+	;InvalidLogNameCharacters: \/*:?"<>;|.
+	; Prepend. Remove the file name extension
+	let svLogName := "CFModLog-"+svLogName[0:((sv_Length svLogName)-5)]
+	RegisterLog svLogName
+	Scribe svText+"|"+svLogName
+endif
+; Close
+sv_Destruct svLogName
+sv_Destruct svText
+end

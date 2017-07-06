@@ -1,0 +1,41 @@
+scn CFCzFnRecursiveInitSearch
+
+ref rRefToSearch
+array_var aSearched
+array_var a2dInitiations
+array_var aRefsToMatch
+
+short bMoreRefsIncluded
+short sCounter
+array_var Iter
+ref rNthExplicitRef
+
+begin Function { rRefToSearch aSearched a2dInitiations aRefsToMatch }
+ar_Append aSearched rRefToSearch
+
+; Find out if our rRefToSearch has IncludeInitiations as an explicit ref. 
+let sCounter := GetNumExplicitRefs rRefToSearch
+while (sCounter -=1) >= 0
+	if eval (GetNthExplicitRef sCounter rRefToSearch) == IncludeInitiations
+		let bMoreRefsIncluded := 1
+		break
+	endif
+loop
+
+; Search rRefToSearch's explicit refs for matches to aRefsToMatch.
+let sCounter := GetNumExplicitRefs rRefToSearch
+while (sCounter -=1) >= 0
+	let rNthExplicitRef := (GetNthExplicitRef sCounter rRefToSearch)
+	ForEach Iter <- aRefsToMatch
+		if eval rNthExplicitRef == Iter["Value"]
+			ar_Append a2dInitiations[Iter["Key"]] rRefToSearch
+			break
+		endif
+	loop
+	if eval bMoreRefsIncluded
+		if eval fNotFound == ar_Find rNthExplicitRef aSearched
+			Call CFCzFnRecursiveInitSearch rNthExplicitRef aSearched a2dInitiations aRefsToMatch
+		endif
+	endif
+loop
+end

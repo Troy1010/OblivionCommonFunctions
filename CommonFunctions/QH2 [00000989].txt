@@ -1,0 +1,21 @@
+scn QH2
+;QuasiHash
+;Retrieves the last 6 digits of the passed FormID as a dec numeral (aka the 2nd key of QuasiFormMaps).
+
+;*This version stores the QH value as the object's gold to prevent repeated recalculation.
+;*ASSUMED:The okObjectKey's pre-defined gold value is 0 or the pre-calculated QH value.
+;*ASSUMED:The okObjectKey should not be referenced ingame for the obvious reason that its gold value will be extreme.
+
+ref okObjectKey
+
+Begin _Function { okObjectKey }
+if eval !IsFormValid okObjectKey
+	Call CFDebug 2 "QH2 recieved an invalid okObjectKey."
+	RETURN
+elseif eval GetGoldValue okObjectKey
+	SetFunctionValue GetGoldValue okObjectKey
+	RETURN
+endif
+SetGoldValue (Call QH okObjectKey) okObjectKey
+SetFunctionValue GetGoldValue okObjectKey
+end

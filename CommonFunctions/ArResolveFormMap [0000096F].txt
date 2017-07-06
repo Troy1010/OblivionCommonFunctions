@@ -1,0 +1,33 @@
+scn ArResolveFormMap
+
+array_var fmFormMap
+short bRaw
+
+array_var Iter
+string_var svKey
+array_var fmNewFormMap
+short iModIndex
+
+begin _Function { fmFormMap bRaw }
+; Filter
+if eval !fmFormMap
+	Call CFDebug 1 "fmFormMap is unconstructed."
+	return
+endif
+
+let fmNewFormMap := ar_Construct "stringmap"
+ForEach Iter <- fmFormMap
+	let svKey := Iter["Key"]
+	let iModIndex := ResolveModIndex (ToNumber svKey[0:1] 1)
+	if eval iModIndex == -1 ;Mod it came from has been uninstalled.
+		continue
+	endif
+	let svKey := (NumToHex iModIndex 2)+svKey[2:7]
+	if eval !bRaw && !IsFormValid (Call GetFormFromID svKey)
+		continue
+	endif
+	let fmNewFormMap[svKey] := Iter["Value"]
+loop
+SetFunctionValue fmNewFormMap
+sv_Destruct svKey
+end

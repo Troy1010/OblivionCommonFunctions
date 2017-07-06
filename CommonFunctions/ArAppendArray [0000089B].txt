@@ -1,0 +1,12 @@
+scn ArAppendArray
+
+array_var aArrayToGiveTo
+array_var aArrayToTakeFrom
+
+array_var Iter
+
+begin Function { aArrayToGiveTo aArrayToTakeFrom }
+ForEach Iter <- aArrayToTakeFrom
+	ar_Append aArrayToGiveTo Iter["Value"]
+Loop
+end

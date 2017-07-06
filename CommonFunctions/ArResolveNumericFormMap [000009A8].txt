@@ -1,0 +1,32 @@
+scn ArResolveNumericFormMap
+
+array_var nfmNumericFormMap
+
+array_var nfmNewNumericFormMap
+array_var OuterIter
+array_var InnerIter
+short iModIndex
+short bRaw
+
+Begin _Function { nfmNumericFormMap bRaw }
+; Filter
+if eval !nfmNumericFormMap
+	Call CFDebug 1 "nfmNumericFormMap is unconstructed."
+	return
+endif
+
+let nfmNewNumericFormMap := Call ArConstructNumericFormMap
+ForEach OuterIter <- nfmNumericFormMap
+	let iModIndex := ResolveModIndex OuterIter["Key"]
+	if eval iModIndex == -1 ;Mod that this group came from has been uninstalled.
+		continue
+	endif
+	ForEach InnerIter <- OuterIter
+		if eval !bRaw && !IsFormValid ( Call GetFormFromID ((NumToHex iModIndex 2)+(NumToHex InnerIter["Key"] 6)) )
+			continue
+		endif
+		let nfmNewNumericFormMap[iModIndex][InnerIter["Key"]] := *InnerIter
+	loop
+loop
+SetFunctionValue nfmNewNumericFormMap
+end

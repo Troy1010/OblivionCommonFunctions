@@ -1,0 +1,14 @@
+scn CFDebug2
+;Common Function Debug Method.
+;This version allows an iIndentLengthOverride
+
+short iDebugLevel ;iDebugLevel. -1:BypassFilter 0:Ignore 1:Important 2:Limited 3:Fun 4:SemiVerbose 5:Verbose 6:Flooding
+string_var svText
+short iIndentLength
+
+ref rCallingScript
+
+begin _Function { iDebugLevel iIndentLength svText }
+let rCallingScript := GetCallingScript
+Call zCFzFnDebug iDebugLevel iIndentLength svText rCallingScript
+end

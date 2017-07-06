@@ -1,0 +1,37 @@
+scn CFGetAVBase
+;What GetBaseAV *should* be, according to Common Functions
+;Returns what value the av is with Base and Script modifiers included.
+; Basically, how high a stat can go through Restoration effects - after all temporary max modifiers expire.
+;In CF's eyes, "base" (aka the unchanged indefinite max value) *should* be able to be different for each and every actor reference.
+;In CF's eyes, the "Script" avPart can fill this role. It should be used by modifiers that last indefinitely: Apparel Enchantments, Abilites, and ModAV commands that are never intended to be undone.
+
+; In many calculations, this function serves as a superior substitute for GetBaseAV.
+; (This is because mods like MMM like to varyingly adjust actor's avs when the actor is first loaded, but this adjustment is not recognized by GetBaseAV.)
+
+; Intention for child mods:
+;A child mod should replace all Apparel Enchants' and Abilities' avParts to "script"
+;Can be used to replace what 100% is for ui bars (in vanilla, it is GetBaseAV).
+;Can be used to replace what 100% is for Fatigue penalties (in vanilla, it is GetBaseAV).
+
+ref rTarget
+short avc
+
+begin _Function { rTarget avc }
+if eval rTarget
+	if eval avc == avcDefendBonus
+		SetFunctionValue (rTarget.GetArmorRating)-(rTarget.GetAV avc)+(rTarget.GetAVMod avc "Script")
+	elseif eval avc == avcEncumbrance
+		SetFunctionValue -(rTarget.GetAV avcStrength)*(GetGameSetting "FActorStrengthEncumbranceMult")+(rTarget.GetAVMod avc "Script")
+	else
+		SetFunctionValue (rTarget.GetBaseAV avc)+(rTarget.GetAVMod avc "Script")
+	endif
+else
+	if eval avc == avcDefendBonus
+		SetFunctionValue (GetArmorRating)-(GetAV avc)+(GetAVMod avc "Script")
+	elseif eval avc == avcEncumbrance
+		SetFunctionValue -(GetAV avcStrength)*(GetGameSetting "FActorStrengthEncumbranceMult")+(GetAVMod avc "Script")
+	else
+		SetFunctionValue (GetBaseAV avc)+(GetAVMod avc "Script")
+	endif
+endif
+end

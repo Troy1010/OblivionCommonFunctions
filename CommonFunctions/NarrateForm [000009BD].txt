@@ -1,0 +1,19 @@
+scn NarrateForm
+
+ref rForm
+string_var svString
+
+begin _Function { rForm }
+if eval !rForm
+	let svString := "<NullForm>"
+else
+	let svString := (GetName rForm)
+	if eval CF.bExtendFormNarration || svString == "<no name>"
+		let svString := svString+"("+(GetFormIDString rForm)+")"
+	endif
+endif
+SetFunctionValue svString
+; Close
+sv_Destruct svString
+end
+

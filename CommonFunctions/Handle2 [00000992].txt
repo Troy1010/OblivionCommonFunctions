@@ -1,0 +1,36 @@
+scn Handle2
+
+ref rHandler
+ref rAction
+array_var aArgs
+
+short iSize
+
+begin _Function { rHandler rAction aArgs }
+let iSize := ar_Size aArgs
+If eval Call rHandler rAction aArgs
+	if eval (iSize==-1)||(iSize==0)
+		Call rAction
+	elseif eval iSize==1
+		Call rAction aArgs[0]
+	elseif eval iSize==2
+		Call rAction aArgs[0] aArgs[1]
+	elseif eval iSize==3
+		Call rAction aArgs[0] aArgs[1] aArgs[2]
+	elseif eval iSize==4
+		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3]
+	elseif eval iSize==5
+		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3] aArgs[4]
+	elseif eval iSize==6
+		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3] aArgs[4] aArgs[5]
+	elseif eval iSize==7
+		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3] aArgs[4] aArgs[5] aArgs[6]
+	elseif eval iSize==8
+		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3] aArgs[4] aArgs[5] aArgs[6] aArgs[7]
+	elseif eval iSize==9
+		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3] aArgs[4] aArgs[5] aArgs[6] aArgs[7] aArgs[8]
+	else
+		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3] aArgs[4] aArgs[5] aArgs[6] aArgs[7] aArgs[8] aArgs[9]
+	endif
+endif
+end

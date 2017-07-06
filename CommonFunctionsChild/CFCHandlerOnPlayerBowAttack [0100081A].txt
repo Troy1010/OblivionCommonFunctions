@@ -1,0 +1,7 @@
+scn CFCHandlerOnPlayerBowAttack
+
+ref rActor
+
+Begin Function { rActor }
+set SB.bBowDrawn to 1
+end

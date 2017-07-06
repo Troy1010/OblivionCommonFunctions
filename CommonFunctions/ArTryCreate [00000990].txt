@@ -1,0 +1,19 @@
+scn ArTryCreate
+
+; Example
+;Let aArray := Call ArTryCreate aArray iType
+
+array_var aArray
+short iType ;iType. 0:Array 1:map 2:stringmap
+
+begin Function { aArray iType }
+if eval aArray
+	SetFunctionValue aArray
+elseif eval iType ==0
+	SetFunctionValue ar_Construct "Array"
+elseif eval iType ==1
+	SetFunctionValue ar_Construct "Map"
+else ;if eval iType ==2
+	SetFunctionValue ar_Construct "Stringmap"
+endif
+end

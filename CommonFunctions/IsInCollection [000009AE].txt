@@ -1,0 +1,8 @@
+scn IsInCollection
+
+array_var bvBoxedVariable ;bvBoxedVariable. (Box me with &).
+array_var cCollection
+
+begin _Function { bvBoxedVariable cCollection }
+SetFunctionValue (ar_Find (*bvBoxedVariable) cCollection) != -99999.0
+end

@@ -1,0 +1,9 @@
+scn CFIsMagicItemInBaseGroup
+;According to CF, these magic items should modify the base.
+;Not that they do without child mods..
+
+ref rMagicItem
+
+begin Function { rMagicItem }
+SetFunctionValue eval (Call GetMagicItemType2 rMagicItem)==5||(Call GetMagicItemType2 rMagicItem)==10
+end

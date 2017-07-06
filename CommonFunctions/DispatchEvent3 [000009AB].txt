@@ -1,0 +1,21 @@
+scn DispatchEvent3
+
+;This version will not modify the okEvent, which allows in-game objects to be used as okEvent.
+;Therefore, it must let the calling script pass the QH of okEvent.
+
+ref okEvent ;okEvent. (ObjectKey)Event
+long iQH
+array_var smVariables
+
+array_var Iter
+
+begin Function { okEvent iQH smVariables }
+; Filter
+if eval Call zCFzFnFilterDispatchEvent okEvent iQH smVariables
+	return
+endif
+; Dispatch
+ForEach Iter <- SB.nfmEvents[GetSourceModIndex okEvent][iQH]
+	Call Iter["Value"] smVariables
+loop
+end

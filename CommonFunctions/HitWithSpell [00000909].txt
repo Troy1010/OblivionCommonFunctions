@@ -1,0 +1,11 @@
+scn HitWithSpell
+
+;*This function will only apply TOUCH effects.
+
+ref rTarget ;rTarget - Assumed to be player/HighActor
+ref rMagicItem ;rMagicItem - to apply to the target.
+
+begin _Function { rTarget rMagicItem }
+CFHitWithSpellCasterRef.MoveTo rTarget
+CFHitWithSpellCasterRef.Cast rMagicItem rTarget
+end

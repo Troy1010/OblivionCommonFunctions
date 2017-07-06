@@ -1,0 +1,11 @@
+scn QH
+;QuasiHash
+;Retrieves the last 6 digits of the passed FormID as a dec numeral (aka the 2nd key of QuasiFormMaps).
+
+;*ToNumber uses a little processing power, so it is recommended that repeatedly used QH values be stored (QH2 automatically stores it in the object's gold value).
+
+ref okObjectKey
+
+Begin _Function { okObjectKey }
+SetFunctionValue (ToNumber (GetRawFormIDString okObjectKey)[2:7] 1)
+end

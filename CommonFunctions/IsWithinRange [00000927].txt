@@ -1,0 +1,9 @@
+scn IsWithinRange
+
+float fArgument
+float fMin
+float fMax
+
+begin _Function { fMin fArgument fMax }
+SetFunctionValue (fMin <= fArgument && fArgument <= fMax)
+end

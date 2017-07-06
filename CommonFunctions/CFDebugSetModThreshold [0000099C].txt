@@ -1,0 +1,9 @@
+scn CFDebugSetModThreshold
+
+;Call on PostLoad2 and/or MainMenu2.
+
+short iDebugLevel ;iDebugLevel. -1:BypassFilter 0:Ignore 1:Important 2:Limited 3:Fun 4:SemiVerbose 5:Verbose 6:Flooding
+
+Begin _Function { iDebugLevel }
+let CF.aDebugThresholds[GetSourceModIndex GetCallingScript] := iDebugLevel
+end

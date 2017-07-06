@@ -1,0 +1,12 @@
+scn Max
+
+float fFloat1
+float fFloat2
+
+begin Function { fFloat1 fFloat2 }
+if fFloat1 > fFloat2
+	SetFunctionValue fFloat1
+else
+	SetFunctionValue fFloat2
+endif
+end

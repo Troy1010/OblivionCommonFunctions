@@ -1,0 +1,25 @@
+scn GetCFLocalData
+
+;Returns an array or boxed value.
+
+;This function allows child mods to get local data in CommonFunctions.
+;It takes an okObjectKey argument to prevent conflicts.
+;*Any object can serve as the okObjectKey
+;*LocalData is reset every time the game is started.
+
+ref okObjectKey
+
+short iIndex
+array_var aReturning
+
+Begin _Function { okObjectKey }
+; Open
+SetFunctionValue &fNotFound
+
+let aReturning := ar_Construct "array"
+let iIndex := -1
+While ModLocalDataExists (GetFormIDString okObjectKey)+$(iIndex+=1)
+	ar_Append aReturning GetModLocalData (GetFormIDString okObjectKey)+$iIndex
+	SetFunctionValue aReturning
+Loop
+end

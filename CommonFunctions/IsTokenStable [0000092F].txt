@@ -1,0 +1,27 @@
+scn IsTokenStable
+
+; Token script example:
+;begin GameMode
+;if eval !Call IsTokenStable
+;	return
+;elseif eval Call StandardTokenRemovalCheck
+;	RemoveMe
+;endif
+;
+;<do things>
+;
+;end
+
+ref rContainer
+
+Begin _Function { }
+if eval !Call IsCallingObjectStable
+	return
+endif
+let rContainer := GetContainer
+if eval rContainer
+	if eval rContainer.Call IsCallingObjectStable
+		SetFunctionValue 1
+	endif
+endif
+end

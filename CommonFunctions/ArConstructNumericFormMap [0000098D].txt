@@ -1,0 +1,16 @@
+scn ArConstructNumericFormMap
+
+;Proper usage:
+;let aArray := Call ConstructFormMap
+
+short iIndex
+array_var nfmFormMap
+
+begin _Function { }
+let nfmFormMap := ar_Construct "array"
+let iIndex := -1
+While IsModLoaded (GetNthModName (iIndex+=1))
+	ar_Append nfmFormMap ar_Construct "map"
+loop
+SetFunctionValue nfmFormMap
+end

@@ -1,0 +1,11 @@
+scn DELETEMEArNarrateArray
+
+;Intended use: Make an informative string to print for debugging.
+
+;Default iKeyCountLimit is 10
+array_var aArray
+string_var svText ;svArrayTitle
+
+Begin _Function { svText aArray }
+;SetFunctionValue Call ArNarrateArray2 svText 10 aArray
+end

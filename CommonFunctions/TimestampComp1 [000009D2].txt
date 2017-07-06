@@ -1,0 +1,12 @@
+scn TimestampComp1
+
+;Returns 1 if the difference between both Timestamps are equal.
+
+int iDaysPassed1
+float fHour1
+int iDaysPassed2
+float fHour2
+
+Begin _Function {iDaysPassed1,fHour1,iDaysPassed2,fHour2}
+SetFunctionValue eval iDaysPassed1==iDaysPassed2 && fHour1==fHour2
+end

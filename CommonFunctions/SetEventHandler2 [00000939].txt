@@ -1,0 +1,22 @@
+scn SetEventHandler2
+
+;Recommended PostLoad2.
+
+;*While the SetEventHandler counterpart is reset OnRestart, SetEventHandler2's Events are reset OnLoad.
+
+ref okEvent ;okEvent. (ObjectKey)Event
+ref rHandlerFunction ;rHandlerFunction. Expected to accept a single array_var argument.
+
+Begin _Function { okEvent rHandlerFunction }
+; Filter
+if eval !SB.nfmEvents
+	Call CFDebug 1 "SetEventHandler2| was called by "+(GetNthModName (GetSourceModIndex GetCallingScript))+"("+(GetFormIDString GetCallingScript)+") before SB.nfmEvents was initialized. Run CFC as the last of the load order. Otherwise, go into that mod and make sure SetEventHandler2 is called after PostLoad0."
+	return
+endif
+; TryCreate the event's ActionList
+if eval !ar_HasKey SB.nfmEvents[GetSourceModIndex okEvent] Call QH okEvent
+	let SB.nfmEvents[GetSourceModIndex okEvent][Call QH okEvent] := ar_Construct "Array"
+endif
+; Add Action To Event
+ar_Append SB.nfmEvents[GetSourceModIndex okEvent][Call QH okEvent] rHandlerFunction
+end

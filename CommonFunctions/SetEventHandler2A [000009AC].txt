@@ -1,0 +1,22 @@
+scn SetEventHandler2A
+
+;Recommended PostLoad2.
+
+;*While the SetEventHandler counterpart is reset OnRestart, SetEventHandler2's Events are reset OnLoad.
+
+ref okEvent ;okEvent. (ObjectKey)Event
+array_var aHandlerFunctions ;aHandlerFunctions. Each rHandlerFunction is expected to be a function which accepts an arrayvar argument.
+
+array_var Iter
+
+Begin _Function { okEvent aHandlerFunctions }
+; Filter
+if eval !aHandlerFunctions
+	Call CFDebug 4 "SetEventHandler2A`Received an uninitialized aHandlerFunctions"
+	return
+endif
+
+ForEach Iter <- aHandlerFunctions
+	Call SetEventHandler2 okEvent (*Iter)
+loop
+end

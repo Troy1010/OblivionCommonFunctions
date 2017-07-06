@@ -1,0 +1,21 @@
+scn IsCollection
+
+; This Function considers that a non-constructed array is not a Collection.
+
+array_var bvBoxedVariable ;bvBoxedVariable. (Box me with &).
+
+string_var svTypeOf
+
+Begin _Function { bvBoxedVariable }
+; Filter
+let svTypeOf := (TypeOf bvBoxedVariable)
+if eval !(svTypeOf=="Array" || svTypeOf=="StringMap" || svTypeOf=="Map")
+	Call CFDebug 2,"IsCollection\Received invalid param"
+	return
+endif
+;
+let svTypeOf := (TypeOf (*bvBoxedVariable))
+SetFunctionValue eval svTypeOf=="Array" || svTypeOf=="StringMap" || svTypeOf=="Map"
+; Close
+sv_Destruct svTypeOf
+end

@@ -1,0 +1,8 @@
+scn RandomI
+
+long iMin
+long iMax
+
+begin Function { iMin, iMax }
+SetFunctionValue (Call Round (Rand iMin iMax))
+end

@@ -1,0 +1,5 @@
+scn zCF0Notes
+
+; Registries
+;Registries are stringmaps of "FormString"::rFormReference.
+;Because the FormID of an item can change with load order, every populated registry should be called by ResolveRegistry in a Postload0 initiation.

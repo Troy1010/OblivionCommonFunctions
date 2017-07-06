@@ -1,0 +1,23 @@
+scn Delay
+
+;This function will only advance its timer during GameMode. Use Delay2 for more options.
+
+float fSecsToWait ;fSecsToWait. (Negative values are considered FramesToWait)(-1 will execute at the start of the next frame)
+ref rHandlerFunction ;rHandlerFunction. Expected to accept an array_var argument. If SetFunctionValue is not 0, the handler will execute every frame until it is.
+array_var aVariablesToPass
+
+;*Currently, using -1 for fTimeToWait is the same as using 0.
+; I was thinking about adding the functionality that if 0 is used as fTimeToWait, the rScriptToRun runs during the same frame, just at the end of it.
+; However, at this time, I cannot think of a real use for that functionality, nor a solid way to implement it.
+
+begin Function { fSecsToWait rHandlerFunction aVariablesToPass }
+; Filter
+if eval !SB.bGameLoaded
+	if eval Call CFDebugIsLevelMet 4
+		Call CFDebug 4 "Delay|Called before initialized."
+	endif
+	return
+endif
+; Register a DelayEntry
+ar_Append CFC.a2dDelayEntries ar_List fSecsToWait 0 rHandlerFunction aVariablesToPass
+end

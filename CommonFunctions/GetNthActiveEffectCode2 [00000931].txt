@@ -1,0 +1,14 @@
+scn GetNthActiveEffectCode2
+
+;This function uses the vanilla compiler to ensure compatibility with OBME for the command.
+
+ref rTarget
+short sActiveEffectIndex
+
+begin Function { rTarget sActiveEffectIndex }
+if eval rTarget
+	SetFunctionValue rTarget.GetNthActiveEffectCode sActiveEffectIndex
+else
+	SetFunctionValue GetNthActiveEffectCode sActiveEffectIndex
+endif
+end

@@ -1,0 +1,26 @@
+scn IsCallingObjectStable
+
+;When a script is called by an UnstableObject, most GetProperty functions (not including GetBaseObject) return null.
+;Calling GetSelf from an unstable object will cause CTD.
+;This generally only happens for:
+;	A script attached to an object during the frame it is being added/deleted.
+;	A script attached to an actor during the frame it is being created.
+;*during those frames, the script runs twice - Once unstable, and again stable.
+
+begin _Function { }
+;A shortcut. Most calling objects will have an attached script, and rUnstableObject.GetScript returns 0 without causing CTD.
+if eval GetScript
+	SetFunctionValue 1
+	return
+;Another shortcut.
+elseif eval 255 != GetSourceModIndex GetBaseObject
+	SetFunctionValue 1
+	return
+;"00000000" represents a failure to call GetBaseObject, which is good. BaseObject.GetBaseObject will return null and base objects are always stable. Stable.
+;A valid formid represents GetFormIDString was able to retrieve a FormID. Stable.
+;"FF000800" represents GetFormIDString was unable to retrieve a FormID (the one exception is for the first reference dropped per timeline). Unstable.
+elseif eval (GetFormIDString GetBaseObject) != "FF000800" ;"FF000800" represents a failure for GetBaseObject to retrieve FormID.
+	SetFunctionValue 1
+	return
+endif
+end

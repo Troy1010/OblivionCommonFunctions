@@ -1,0 +1,16 @@
+scn zCFWaiterDeleteReference
+
+array_var aArguments ;0:rRefToDelete
+
+ref rRefToDelete
+
+begin _Function { aArguments }
+let rRefToDelete := aArguments[0]
+if eval IsFormValid rRefToDelete
+	if eval !rRefToDelete.DeleteReference
+		Call CFDebug 2 "Unexpectedly was not able to delete "+(GetFormIDString rRefToDelete)+"."
+	endif
+else
+	Let CF.RAWSTREAMDeathRowRefs[GetFormIDString rRefToDelete] := GameDaysPassed
+endif
+end

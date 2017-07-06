@@ -1,0 +1,35 @@
+scn CFCInitPrimary
+
+;This function is meant to run every BaseDataLoad(OnMainMenu and OnLoad).
+
+short iIndex
+string_var svLogName
+
+begin _Function { }
+; Setup CFDebug
+let CF.aDebugThresholds := ar_Construct "array"
+let CF.aDebugIndentLevels := ar_Construct "array"
+let iIndex := -1
+While IsModLoaded (GetNthModName (iIndex+=1))
+	ar_Append CF.aDebugThresholds 0
+	ar_Append CF.aDebugIndentLevels 0
+loop
+let CF.bConScribeInstalled := IsPluginInstalled "ConScribe"
+; Clear old CF logs
+if eval CF.bConScribeInstalled && GetGameRestarted
+	UnregisterLog "CFDefaultLog" 0 1
+	let iIndex := -1
+	While IsModLoaded (GetNthModName (iIndex+=1))
+		let svLogName := GetNthModName iIndex
+		let svLogName := "CFML-"+svLogName[0:((sv_Length svLogName) -5)]
+		UnregisterLog svLogName 0 1
+	loop
+endif
+; let zCFCINIHelperRef Load INI
+let CFCInitActRef.iInit := 1
+CFCInitActRef.Activate DummyNPCRef 1
+; Close
+Call CFDebug 5 "CFCInitPrimary. iDebugThreshold:"+$CF.aDebugThresholds[GetSourceModIndex GetCurrentScript]
+let CFC.bPrimaryInitComplete := 1
+sv_Destruct svLogName
+end

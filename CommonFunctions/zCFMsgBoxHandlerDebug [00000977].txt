@@ -1,0 +1,9 @@
+scn zCFMsgBoxHandlerDebug
+
+short iButtonPressed
+
+begin _Function { iButtonPressed }
+if eval iButtonPressed ==1
+	Con_QuitGame
+endif
+end

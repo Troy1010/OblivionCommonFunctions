@@ -1,0 +1,10 @@
+scn zCFWaiterEnable
+
+array_var aArguments
+
+ref rTemp
+
+begin Function { aArguments }
+let rTemp := aArguments[0]
+rTemp.Enable
+end

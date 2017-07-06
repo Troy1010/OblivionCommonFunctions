@@ -1,0 +1,42 @@
+scn ReportAV
+
+;This is useful a reference to find which GetAV you might want to use.
+
+ref rTarget
+short avc ;ActorValueCode
+
+begin _Function { rTarget avc }
+if eval rTarget
+	printc "-----------------------------------------"
+	printc "CF ReportAV: Target:%n(%i) ActorValue:" + (ActorValueToString avc) + "(%g)" rTarget rTarget avc
+	printc "CF ReportAV:     'Root'(Base-BaseMod):%f" Call CFGetAVRoot rTarget avc
+	printc "CF ReportAV:     'Base'(Base+ScriptMod):%f" Call CFGetAVBase rTarget avc
+	printc "CF ReportAV:      'Max'(Base+ScriptMod+MaxMod):%f" Call CFGetAVBase rTarget avc
+	printc "CF ReportAV:  'Current'(Base+ScriptMod+MaxMod+DamageMod):%f" Call CFGetAVBase rTarget avc
+	printc "CF ReportAV: BaseMod:%f MaxMod:%f ScriptMod:%f DamageMod:%f" (rTarget.GetAVModC avc "base") (rTarget.GetAVMod avc "Max") (rTarget.GetAVMod avc "Script") (rTarget.GetAVMod avc "Damage")
+	if eval avc == avcDefendBonus
+		printc "CF ReportAV: DefendBonusRelatedAVs: ArmorRating:%f" (rTarget.GetArmorRating)
+		printc "CF ReportAV: ArmorRating represents (Armor+Base+ScriptMod+MaxMod+DamageMod)"
+	endif
+	if eval avc == avcEncumbrance
+		printc "CF ReportAV: EncumbranceRelatedAVs: CarriedWeight:%f" ((rTarget.GetAV avc)-(rTarget.GetAVMod avc "Max")-(rTarget.GetAVMod avc "Script")-(rTarget.GetAVMod avc "Damage"))
+		printc "CF ReportAV: CarriedWeight represents (Total-ScriptMod-MaxMod-DamageMod)"
+	endif
+else
+	printc "-----------------------------------------"
+	printc "CF ReportAV: Target:%n(%i) ActorValue:" + (ActorValueToString avc) + "(%g)" rTarget rTarget avc
+	printc "CF ReportAV:     'Root'(Base-BaseMod):%f" Call CFGetAVRoot rTarget avc
+	printc "CF ReportAV:     'Base'(Base+ScriptMod):%f" Call CFGetAVBase rTarget avc
+	printc "CF ReportAV:      'Max'(Base+ScriptMod+MaxMod):%f" Call CFGetAVBase rTarget avc
+	printc "CF ReportAV:  'Current'(Base+ScriptMod+MaxMod+DamageMod):%f" Call CFGetAVBase rTarget avc
+	printc "CF ReportAV: BaseMod:%f MaxMod:%f ScriptMod:%f DamageMod:%f" (GetAVModC avc "base") (GetAVMod avc "Max") (GetAVMod avc "Script") (GetAVMod avc "Damage")
+	if eval avc == avcDefendBonus
+		printc "CF ReportAV: DefendBonusRelatedAVs: ArmorRating:%f" (GetArmorRating)
+		printc "CF ReportAV: ArmorRating represents (Armor+Base+ScriptMod+MaxMod+DamageMod)"
+	endif
+	if eval avc == avcEncumbrance
+		printc "CF ReportAV: EncumbranceRelatedAVs: CarriedWeight:%f" ((GetAV avc)-(GetAVMod avc "Max")-(GetAVMod avc "Script")-(GetAVMod avc "Damage"))
+		printc "CF ReportAV: CarriedWeight represents (Total-ScriptMod-MaxMod-DamageMod)"
+	endif
+endif
+end

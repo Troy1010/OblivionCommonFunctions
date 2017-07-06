@@ -1,0 +1,19 @@
+scn MinOfArray
+
+array_var aArray
+
+array_var Iter
+float fReturning
+
+begin Function { aArray }
+if eval !(aArray)
+	return
+endif
+let fReturning := aArray[(ar_First aArray)]
+ForEach Iter <- aArray
+	if eval Iter["Value"] < fReturning
+		let fReturning := Iter["Value"]
+	endif
+loop
+SetFunctionValue fReturning
+end

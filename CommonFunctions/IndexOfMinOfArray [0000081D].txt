@@ -1,0 +1,22 @@
+scn IndexOfMinOfArray
+
+array_var arg
+
+array_var keyAndValue
+float tempFloat
+short returningShort
+
+begin Function { arg }
+if eval !(arg)
+	return
+endif
+let returningShort := ar_First arg
+let tempFloat := arg[returningShort]
+foreach keyAndValue <- arg
+	if eval keyAndValue["Value"] < tempFloat
+		let tempFloat := keyAndValue["Value"]
+		let returningShort := keyAndValue["Key"]
+	endif
+loop
+SetFunctionValue returningShort
+end

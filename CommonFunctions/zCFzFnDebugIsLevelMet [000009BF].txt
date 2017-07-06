@@ -1,0 +1,17 @@
+scn zCFzFnDebugIsLevelMet
+
+short iDebugLevel ;iDebugLevel. -1:BypassFilter 0:Ignore 1:Important 2:Limited 3:Fun 4:SemiVerbose 5:Verbose 6:Flooding
+ref rCallingScript
+
+Begin _Function { iDebugLevel rCallingScript }
+; Filter
+if eval !rCallingScript
+	Call CFDebug (-1) "CFDebugIsLevelMet`rCallingScript is null."
+	return
+elseif eval !TestExpr CF.aDebugThresholds[GetSourceModIndex rCallingScript]
+	Call CFDebug (-1) "CFDebugIsLevelMet`Caller:"+(GetFormIDString rCallingScript)+"`Could not access value of aDebugThresholds."
+	return
+endif
+
+SetFunctionValue (iDebugLevel <= CF.aDebugThresholds[GetSourceModIndex rCallingScript]) && (iDebugLevel <= CF.iMasterDebugThreshold)
+end

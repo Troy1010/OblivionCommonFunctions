@@ -1,0 +1,29 @@
+scn DispatchEventWithIReturning
+
+;This function uses QH2, so okEvent must not be an in-game object.
+;This function will call each EventHandler and break as soon as any EventHandler returns not -1.
+
+ref okEvent ;okEvent. (ObjectKey)Event
+array_var smVariables
+
+long iQH
+array_var Iter
+short iReturning
+
+begin Function { okEvent smVariables }
+; Open
+let iQH := Call QH2 okEvent
+; Filter
+if eval Call zCFzFnFilterDispatchEvent okEvent iQH smVariables
+	return
+endif
+; Dispatch
+SetFunctionValue -1
+ForEach Iter <- SB.nfmEvents[GetSourceModIndex okEvent][iQH]
+	let iReturning := Call Iter["Value"] smVariables
+	if eval iReturning != -1
+		SetFunctionValue iReturning
+		break
+	endif
+loop
+end

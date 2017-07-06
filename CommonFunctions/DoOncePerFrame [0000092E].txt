@@ -1,0 +1,18 @@
+scn DoOncePerFrame
+
+;Will return true only once per CallingScript per frame.
+;*This function will cause errors if called before SB.bGameLoaded==1.
+;*This function must hash a string. Don't overuse.
+
+ref rTemp
+
+begin _Function { }
+if eval !Call IsCallingObjectStable
+	return
+endif
+let rTemp := GetCallingScript
+if eval !ar_HasKey CF.LISTDoOncePerFrame GetFormIDString rTemp
+	let CF.LISTDoOncePerFrame[GetFormIDString rTemp] := 1
+	SetFunctionValue 1
+endif
+end

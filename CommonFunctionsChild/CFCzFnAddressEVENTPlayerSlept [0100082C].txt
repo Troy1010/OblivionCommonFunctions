@@ -1,0 +1,15 @@
+scn CFCzFnAddressEVENTPlayerSlept
+
+begin Function { }
+; EVENTPlayerSlept
+if eval GetPCSleepHours
+	if eval !CFC.iIntendedHours
+		let CFC.iIntendedHours := GetPCSleepHours
+	endif
+	let CFC.iActualHours := CFC.iIntendedHours - GetPCSleepHours + 1
+	let CFC.bWait := !IsPCSleeping
+elseif CFC.iIntendedHours
+	Call DispatchEvent2 EVENTPlayerSlept ar_Map "iIntendedHours"::CFC.iIntendedHours "iActualHours"::CFC.iActualHours "bInterrupted"::(eval CFC.iIntendedHours!=CFC.iActualHours) "bWait"::CFC.bWait
+	let CFC.iIntendedHours := 0
+endif
+end

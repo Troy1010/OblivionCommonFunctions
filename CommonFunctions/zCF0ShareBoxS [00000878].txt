@@ -1,0 +1,48 @@
+scn zCF0ShareBoxS
+
+; Used in CF
+short bSprinting
+
+; Defined by CF
+short bGameLoaded ;0 during MainMenu, 1 otherwise.
+ref rLastCrosshairRef
+short bRunning
+short bWalking
+short bStanding
+short bBowDrawn
+ref rNull
+int iFrameCount
+short bModIndexResolutionRequired	;Was meant to save processing time during initiations, but is likely unnecessary. Set to 1 during PostLoad if loading a game that was not saved during the current runtime.
+float fFrameSecondsPassed
+float fGameModeGameHour
+int iGameModeDaysPassed
+;FormMaps
+array_var nfmEvents
+array_var LISTFloodingEvents	;If an event within this list is passed to DispatchEvent2, its iDebugLevel will be set to Flooding.
+
+
+
+; Defined in Mods.
+;StatSystems
+ref avrPhysicality
+
+
+
+
+
+
+
+
+
+
+
+
+
+;Registries
+;array_var regRecalcBaseHealth
+;array_var regRegulateSpeed
+;array_var regRecalc5050Confidence
+
+;array_var aRegCellsWithDarkLighting
+;array_var aRegRecalc5050Confidence
+;array_var aRegFleeable

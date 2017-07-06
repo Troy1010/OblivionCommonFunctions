@@ -1,0 +1,14 @@
+scn zCFzIndent
+
+int iIndentCount
+
+string_var svReturning
+
+Begin Function { iIndentCount }
+While (iIndentCount-=1)>=0
+	let svReturning := svReturning+"-"
+Loop
+SetFunctionValue svReturning
+; Close
+sv_Destruct svReturning
+end

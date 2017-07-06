@@ -1,0 +1,100 @@
+scn zCFAddressMsgBoxWithHandler
+
+array_var aMsgBoxStrings ;aMsgBoxStrings. Null will handle a sent message. Otherwise, 0:Message 1+:ButtonLabels to send MessageBox. 
+
+;iButtonPressIndex only responds if MessageBox is called within the same scriptID.
+;MessageBox is a picky function.. it takes array_var variable names as literal strings.
+
+string_var sMessage
+string_var sButton0
+string_var sButton1
+string_var sButton2
+string_var sButton3
+string_var sButton4
+string_var sButton5
+string_var sButton6
+string_var sButton7
+string_var sButton8
+string_var sButton9
+short iButtonPressIndex
+
+begin _Function { aMsgBoxStrings }
+if eval aMsgBoxStrings
+	if eval Call CFDebugIsLevelMet 5
+		Call CFDebug 5 "zCFAddressMsgBoxWithHandler\Sending Message Box."
+	endif
+	; Send MessageBox
+	;Must be done within the same ScriptFormID as GetButtonPressed
+	let sMessage := aMsgBoxStrings[0]
+	if eval (ar_Size aMsgBoxStrings) ==1
+		MessageBox $sMessage
+		sv_Destruct sMessage
+		return
+	endif
+	let sButton0 := aMsgBoxStrings[1]
+	if eval (ar_Size aMsgBoxStrings) ==2
+		MessageBox $sMessage $sButton0
+		sv_Destruct sMessage sButton0
+		return
+	endif
+	let sButton1 := aMsgBoxStrings[2]
+	if eval (ar_Size aMsgBoxStrings) ==3
+		MessageBox $sMessage $sButton0 $sButton1
+		sv_Destruct sMessage sButton0 sButton1
+		return
+	endif
+	let sButton2 := aMsgBoxStrings[3]
+	if eval (ar_Size aMsgBoxStrings) ==4
+		MessageBox $sMessage $sButton0 $sButton1 $sButton2
+		sv_Destruct sMessage sButton0 sButton1 sButton2
+		return
+	endif
+	let sButton3 := aMsgBoxStrings[4]
+	if eval (ar_Size aMsgBoxStrings) ==5
+		MessageBox $sMessage $sButton0 $sButton1 $sButton2 $sButton3
+		sv_Destruct sMessage sButton0 sButton1 sButton2 sButton3
+		return
+	endif
+	let sButton4 := aMsgBoxStrings[5]
+	if eval (ar_Size aMsgBoxStrings) ==6
+		MessageBox $sMessage $sButton0 $sButton1 $sButton2 $sButton3 $sButton4
+		sv_Destruct sMessage sButton0 sButton1 sButton2 sButton3 sButton4
+		return
+	endif
+	let sButton5 := aMsgBoxStrings[6]
+	if eval (ar_Size aMsgBoxStrings) ==7
+		MessageBox $sMessage $sButton0 $sButton1 $sButton2 $sButton3 $sButton4 $sButton5
+		sv_Destruct sMessage sButton0 sButton1 sButton2 sButton3 sButton4 sButton5
+		return
+	endif
+	let sButton6 := aMsgBoxStrings[7]
+	if eval (ar_Size aMsgBoxStrings) ==8
+		MessageBox $sMessage $sButton0 $sButton1 $sButton2 $sButton3 $sButton4 $sButton5 $sButton6
+		sv_Destruct sMessage sButton0 sButton1 sButton2 sButton3 sButton4 sButton5 sButton6
+		return
+	endif
+	let sButton7 := aMsgBoxStrings[8]
+	if eval (ar_Size aMsgBoxStrings) ==9
+		MessageBox $sMessage $sButton0 $sButton1 $sButton2 $sButton3 $sButton4 $sButton5 $sButton6 $sButton7
+		sv_Destruct sMessage sButton0 sButton1 sButton2 sButton3 sButton4 sButton5 sButton6 sButton7
+		return
+	endif
+	let sButton8 := aMsgBoxStrings[9]
+	if eval (ar_Size aMsgBoxStrings) ==10
+		MessageBox $sMessage $sButton0 $sButton1 $sButton2 $sButton3 $sButton4 $sButton5 $sButton6 $sButton7 $sButton8
+		sv_Destruct sMessage sButton0 sButton1 sButton2 sButton3 sButton4 sButton5 sButton6 sButton7 sButton8
+		return
+	endif
+	let sButton9 := aMsgBoxStrings[10]
+	MessageBox $sMessage $sButton0 $sButton1 $sButton2 $sButton3 $sButton4 $sButton5 $sButton6 $sButton7 $sButton8 $sButton9
+	sv_Destruct sMessage sButton0 sButton1 sButton2 sButton3 sButton4 sButton5 sButton6 sButton7 sButton8
+	sv_Destruct sButton9
+	return
+elseif eval (iButtonPressIndex := GetButtonPressed) != -1 ;UserInput recieved.
+	if eval Call CFDebugIsLevelMet 5
+		Call CFDebug 5 "zCFAddressMsgBoxWithHandler\Recieved user input iButtonPressIndex:"+$iButtonPressIndex
+	endif
+	Call CF.rMsgBoxHandler iButtonPressIndex
+	let CF.rMsgBoxHandler := SB.rNull
+endif
+end

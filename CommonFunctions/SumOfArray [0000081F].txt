@@ -1,0 +1,16 @@
+scn SumOfArray
+
+array_var aArray
+
+array_var Iter
+float fReturning
+
+begin Function { aArray }
+if eval !(aArray)
+	return
+endif
+forEach Iter <- aArray
+	let fReturning += Iter["Value"]
+loop
+SetFunctionValue fReturning
+end

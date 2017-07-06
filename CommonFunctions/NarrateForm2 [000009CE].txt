@@ -1,0 +1,14 @@
+scn NarrateForm2
+
+;This version forces FormID narration.
+
+ref rForm
+
+begin _Function { rForm }
+if eval !rForm
+	SetFunctionValue "<NullForm>"
+else
+	SetFunctionValue (GetName rForm)+"("+(GetFormIDString rForm)+")"
+endif
+end
+

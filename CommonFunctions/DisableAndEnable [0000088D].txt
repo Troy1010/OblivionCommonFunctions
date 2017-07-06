@@ -1,0 +1,11 @@
+scn DisableAndEnable
+
+;This function may be depreciated.
+;It is meant to re-initialize a reference.
+
+ref rRefToRefresh
+
+begin Function { rRefToRefresh }
+rRefToRefresh.Disable
+Call Delay2 -1 2 zCFWaiterEnable ar_List rRefToRefresh
+end

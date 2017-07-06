@@ -1,0 +1,12 @@
+scn ArMergeMap
+
+array_var mMapToGiveTo
+array_var mMapToTakeFrom
+
+array_var Iter
+
+begin Function { mMapToGiveTo mMapToTakeFrom }
+ForEach Iter <- mMapToTakeFrom
+	let mMapToGiveTo[Iter["Key"]] := Iter["Value"]
+Loop
+end

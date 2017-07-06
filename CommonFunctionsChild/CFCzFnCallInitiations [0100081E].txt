@@ -1,0 +1,103 @@
+scn CFCzFnCallInitiations
+
+int iInitiationType ;0:OnStart 1:MainMenu 2:PostLoad 3:InGame
+
+array_var a2dInitiations	;a2dInitiations[iInitiationIndex:aInitiations][iIndex:rInitiationFunction]
+array_var aSearched
+int iCounter
+ref rRefToSearch
+array_var aRefsToMatch
+array_var Iter
+array_var OuterIter
+string_var sInitiationType
+int iInitCount
+ref rRef
+
+begin _Function { iInitiationType }
+; Open
+let a2dInitiations := ar_Construct "array"
+let aSearched := ar_List CFCHandlerPostLoadGame CFCHandlerOnNewGame
+if eval iInitiationType ==0
+	let aRefsToMatch := ar_List InitOnStart0 InitOnStart1 InitOnStart2 InitOnStart3
+elseif eval iInitiationType ==1
+	let aRefsToMatch := ar_List InitMainMenu0 InitMainMenu1 InitMainMenu2 InitMainMenu3
+elseif eval iInitiationType ==2
+	let aRefsToMatch := ar_List InitPostLoad0 InitPostLoad1 InitPostLoad2 InitPostLoad3
+elseif eval iInitiationType ==3
+	let aRefsToMatch := ar_List InitInGame0 InitInGame1 InitInGame2 InitInGame3
+endif
+ForEach Iter <- aRefsToMatch
+	ar_Append a2dInitiations ar_Construct "array"
+loop
+; Prematurely Call CFCInitPrimary whenever a BaseDataLoad happens.
+;(necessary to setup Debug.)
+if eval !CFC.bPrimaryInitComplete || iInitiationType ==2
+	Call CFCInitPrimary
+endif
+; Loop through each xx000800 to populate a2dInitiations
+let iCounter := 255
+while (iCounter -=1) >=0
+	let rRefToSearch := GetFormFromMod (GetNthModName iCounter) "000800"
+	if eval !IsFormValid rRefToSearch
+		continue
+	endif
+	Call CFCzFnRecursiveInitSearch rRefToSearch aSearched a2dInitiations aRefsToMatch
+loop
+; Debug
+if eval Call CFDebugIsLevelMet 4
+	if eval iInitiationType ==0
+		let sInitiationType := "OnStart"
+	elseif eval iInitiationType ==1
+		let sInitiationType := "MainMenu"
+	elseif eval iInitiationType ==2
+		let sInitiationType := "PostLoad"
+	elseif eval iInitiationType ==3
+		let sInitiationType := "InGame"
+	endif
+	ForEach OuterIter <- a2dInitiations
+		ForEach Iter <- OuterIter["Value"]
+			let iInitCount += 1
+		loop
+	loop
+	Call CFDebug2 4 5 "Calling "+sInitiationType+" Initiations. Count:"+$iInitCount
+endif
+; Call initiation scripts in a2dInitiations
+if eval iInitiationType ==0
+	let CF.bCallingOnStartInitiations := 1
+elseif eval iInitiationType ==1
+	let CF.bCallingMainMenuInitiations := 1
+elseif eval iInitiationType ==2
+	let CF.bCallingPostLoadInitiations := 1
+elseif eval iInitiationType ==3
+	let CF.bCallingInGameInitiations := 1
+endif
+ForEach OuterIter <- a2dInitiations
+	let CF.iInitiationIndex := OuterIter["Key"]
+	ForEach Iter <- OuterIter["Value"]
+		; Debug
+		if eval Call CFDebugIsLevelMet 4
+			Call CFDebug2 4 1 "Init"+sInitiationType+$CF.iInitiationIndex+"\"+(GetNthModName (GetSourceModIndex Iter["Value"]))
+		endif
+		; Call Initiation
+		Call Iter["Value"]
+	loop
+	; Also activate every ref in CFInitRefCell. Their blocks should be self-filtered. (InitRefs are required for RunBatchScript's bRunOnRef option.)
+	let rRef := GetFirstRefInCell zCFInitActRefCell
+	While rRef
+		rRef.Activate DummyNPCRef 1
+		let rRef := GetNextRef
+	loop
+loop
+if eval iInitiationType ==0
+	let CF.bCallingOnStartInitiations := 0
+elseif eval iInitiationType ==1
+	let CF.bCallingMainMenuInitiations := 0
+elseif eval iInitiationType ==2
+	let CF.bCallingPostLoadInitiations := 0
+elseif eval iInitiationType ==3
+	let CF.bCallingInGameInitiations := 0
+endif
+
+; Close
+sv_Destruct sInitiationType
+end

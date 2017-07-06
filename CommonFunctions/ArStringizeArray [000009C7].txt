@@ -1,0 +1,28 @@
+scn ArStringizeArray
+
+;*Only 1d, normal arrays that do not contain forms are supported
+;Intended to store an array as a string.
+
+array_var aArray
+
+array_var Iter
+string_var svReturning
+
+begin _Function { aArray }
+; Open and Filter
+let aArray := Call ArTryCreate aArray 0
+;
+ForEach Iter <- aArray
+	if eval Iter["Key"] != ar_First aArray
+		let svReturning += ","
+	endif
+	if eval (TypeOf *Iter) == "String" || (TypeOf *Iter) == "Number"
+		let svReturning += $*Iter
+	else
+		Call CFDebug 4 "ArStringize\Received unsupported type:"+(TypeOf *Iter)
+	endif
+Loop
+SetFunctionValue svReturning
+; Close
+sv_Destruct
+end

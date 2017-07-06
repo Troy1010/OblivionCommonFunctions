@@ -1,0 +1,30 @@
+scn MsgBoxWithHandler
+
+;array_var 
+ref rMsgBoxHandler	;rMsgBoxHandler. A Function that accepts an iButtonPressedIndex(0:FirstButtonWasPressed, 1:SecondButtonWasPressed, etc., up to 9)
+					;If another MsgBox replace
+array_var aMsgBoxStrings ;aMsgBoxStrings. An array expected to contain 0:MessageBoxMessage 1+:ButtonLabels(optional. Up to 10)
+
+;Example SetMsgBoxUserInputHandler usage:
+;	Call MsgBoxWithHandler rMsgBoxHandler ar_List "Would you like to Continue or Quit?" "Continue" "Quit"
+;
+;Example rMsgBoxHandler:
+;	Begin Function { iButtonPressIndex }
+;	if iButtonPressIndex ==0
+;		<do something>
+;	endif
+;	end
+
+begin _Function { rMsgBoxHandler aMsgBoxStrings }
+; Filter
+if eval !aMsgBoxStrings
+	return
+elseif eval !ar_HasKey aMsgBoxStrings 0
+	return
+endif
+; Store rHandler
+let CF.rMsgBoxHandler := rMsgBoxHandler
+; Use zCFAddressMsgBoxWithHandler to send the MessageBox
+Call zCFAddressMsgBoxWithHandler aMsgBoxStrings
+;Let CFC call the handler when UserInput arrives
+end

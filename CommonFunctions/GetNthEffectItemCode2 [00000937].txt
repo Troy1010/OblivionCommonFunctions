@@ -1,0 +1,10 @@
+scn GetNthEffectItemCode2
+
+;This command must be compiled without the OBSE compiler to be compatable with OBME.
+
+ref rEffectItem
+short sEffectItemIndex
+
+begin Function { rEffectItem sEffectItemIndex }
+SetFunctionValue GetNthEffectItemCode rEffectItem sEffectItemIndex
+end

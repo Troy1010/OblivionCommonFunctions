@@ -1,0 +1,22 @@
+scn TimestampComp2
+
+;Returns -1 if Timestamp1>Timestamp2. Returns 1 if Timestamp1<Timestamp2. Returns 0 if Timestamp1==Timestamp2.
+
+int iDaysPassed1
+float fHour1
+int iDaysPassed2
+float fHour2
+
+Begin _Function {iDaysPassed1,fHour1,iDaysPassed2,fHour2}
+if eval iDaysPassed1 > iDaysPassed2
+	SetFunctionValue -1
+elseif eval iDaysPassed1 < iDaysPassed2
+	SetFunctionValue 1
+elseif eval fHour1 > fHour2
+	SetFunctionValue -1
+elseif eval fHour1 < fHour2
+	SetFunctionValue 1
+else
+	SetFunctionValue 0
+endif
+end

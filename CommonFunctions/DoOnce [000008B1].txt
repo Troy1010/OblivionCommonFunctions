@@ -1,0 +1,18 @@
+scn DoOnce
+
+;Will return true only once per CallingScript.
+;*This function will cause errors if called before PostLoad.
+;*This function must hash a string. Don't overuse.
+
+ref rTemp
+
+begin _Function { }
+if eval !Call IsCallingObjectStable
+	return
+endif
+let rTemp := GetCallingScript
+if eval !ar_HasKey CF.STREAMDoOnce GetFormIDString rTemp
+	let CF.STREAMDoOnce[GetFormIDString rTemp] := 1
+	SetFunctionValue 1
+endif
+end

@@ -1,0 +1,48 @@
+scn StandardFormMapInit
+
+;Recommended PostLoad2.
+;EX: Let fmFormMap := Call StandardFormMapInit fmFormMap iType
+
+short iType ;iType. 0:Stream(Resolve) 1:RawStream(ResolveRaw) 2:List(Whipe) 3:NumericFormMap(Resolve) 4:NumericFormMap(ResolveRaw) 5:NumericFormMap(Whipe) 6:QuasiFormMap(NoWhipe) 7:QuasiFormMap(Whipe)
+
+array_var fmFormMap
+
+begin _Function { fmFormMap iType }
+SetFunctionValue fmFormMap
+if iType ==0
+	if eval !fmFormMap
+		SetFunctionValue ar_Construct "stringmap"
+	elseif eval SB.bModIndexResolutionRequired
+		SetFunctionValue Call ArResolveFormMap fmFormMap 0
+	endif
+elseif iType ==1
+	if eval !fmFormMap
+		SetFunctionValue ar_Construct "stringmap"
+	elseif eval SB.bModIndexResolutionRequired
+		SetFunctionValue Call ArResolveFormMap fmFormMap 1
+	endif
+elseif iType ==2
+	SetFunctionValue ar_Construct "stringmap"
+elseif iType ==3
+	if eval !fmFormMap
+		SetFunctionValue Call ArConstructNumericFormMap
+	elseif eval SB.bModIndexResolutionRequired
+		SetFunctionValue Call ArResolveNumericFormMap fmFormMap 0
+	endif
+elseif iType ==4
+	if eval !fmFormMap
+		SetFunctionValue Call ArConstructNumericFormMap
+	elseif eval SB.bModIndexResolutionRequired
+		SetFunctionValue Call ArResolveNumericFormMap fmFormMap 1
+	endif
+elseif iType ==5
+	SetFunctionValue Call ArConstructNumericFormMap
+elseif iType ==6
+	SetFunctionValue Call ArTryCreate fmFormMap 1
+elseif iType ==7
+	SetFunctionValue ar_Construct "map"
+else
+	Call CFDebug 2 "StandardFormMapInit`Received invalid type."
+	SetFunctionValue ar_Construct "stringmap"
+endif
+end

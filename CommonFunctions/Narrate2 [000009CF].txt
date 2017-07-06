@@ -1,0 +1,23 @@
+scn Narrate2
+
+;This version is single-line.
+
+array_var bvBoxedVariable ;bvBoxedVariable. (Box me with &)
+string_var svTypeOf
+
+Begin Function {bvBoxedVariable}
+let svTypeOf := TypeOf *bvBoxedVariable
+if eval Call IsCollection bvBoxedVariable ;Proper syntax would be (&(*bvBoxedVariable))
+	SetFunctionValue "<Collection>["+(Call NarrateCollection2 (*bvBoxedVariable))+"]"
+elseif eval svTypeOf == "String" || svTypeOf == "Number"
+	SetFunctionValue $(*bvBoxedVariable)
+elseif eval svTypeOf == "Form"
+	SetFunctionValue Call NarrateForm (*bvBoxedVariable)
+elseif eval svTypeOf == "<Bad Array>"
+	SetFunctionValue "<Collection(Unconstructed)>"
+else
+	SetFunctionValue "<Unknown>"
+endif
+; Close
+sv_Destruct svTypeOf
+end

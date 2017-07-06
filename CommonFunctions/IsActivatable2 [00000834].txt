@@ -1,0 +1,11 @@
+scn IsActivatable2
+
+;This function will not produce an error when called on an unloaded reference.
+
+ref rRef
+ 
+begin Function { rRef }
+if eval IsFormValid rRef
+	SetFunctionValue rRef.IsActivatable
+endif
+end

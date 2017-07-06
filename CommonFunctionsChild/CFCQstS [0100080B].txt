@@ -1,0 +1,159 @@
+scn CFCQstS
+;Every frame, the quests at the bottom of the load order are run at the begining of the frame.
+;(the quests at the top of the load order are run in the middle of the frame, before object scripts.)
+;Wait Entries especially should be addressed here so that the Wait functionality is consistent.
+
+; User Options
+;PeriodicScanning
+float fActorScanPeriod
+; Shared/Core Variables
+float fQuestDelayTime
+short sCounter
+ref rTemp
+array_var Iter
+short bGetCellChanged
+short bPrimaryInitComplete
+; Delay
+array_var a2dDelayEntries ;0:fTimeToWait 1:MenuModeType 2:rScriptToRun 3:aVariablesToPassToScriptToRun
+; Initiations
+short iInGameInitCountdown
+; HighActors
+array_var aCurHighActors
+array_var aOldHighActors
+; EventCellChanged
+ref rOldCell
+; EventWeatherChanged
+ref rOldWeather
+; EVENTPlayerSlept
+short iIntendedHours
+short iActualHours
+short bWait
+
+begin _GameMode
+; Update Frame Variables
+let SB.iFrameCount += 1
+let SB.fFrameSecondsPassed := GetSecondsPassed
+let SB.fGameModeGameHour += SB.fFrameSecondsPassed/3600
+if SB.fGameModeGameHour > 24
+	let SB.fGameModeGameHour -= 24
+	let SB.iGameModeDaysPassed += 1
+endif
+let bGetCellChanged := GetCellChanged
+
+; EVENTQuasiStartOfFrame
+if eval bPrimaryInitComplete
+	Call DispatchEvent2 EVENTQuasiStartOfFrame ar_Null
+endif
+
+; InGameInitiations
+if eval iInGameInitCountdown
+	let iInGameInitCountdown -= 1
+	if eval !iInGameInitCountdown
+		Call CFCzFnCallInitiations 3
+	endif
+endif
+
+; Addressing Wait Entries
+Call CFCzFnAddressDelayEntries
+
+; Address MsgBoxWithHandler Entry
+if eval CF.rMsgBoxHandler
+	Call zCFAddressMsgBoxWithHandler ar_Null
+endif
+
+; EVENTNewHighActor
+let aCurHighActors := GetHighActors
+ar_Insert aCurHighActors 0 playerRef
+ForEach Iter <- aCurHighActors
+	let rTemp := Iter["Value"]
+	if eval ar_HasKey aOldHighActors Iter["Key"]
+		if eval aOldHighActors[Iter["Key"]] == rTemp
+			continue
+		elseif eval Call IsInCollection (&rTemp),aOldHighActors
+			continue
+		endif
+	endif
+	;rActor is new.
+	if eval !(rTemp.GetItemCount zCFMarkProcessed)
+		rTemp.AddItemNS zCFMarkProcessed 1
+		Call DispatchEvent2 EVENTProcessActor ar_Map "rActor"::rTemp "rbActor"::(rTemp.GetBaseObject)
+	endif
+	Call DispatchEvent2 EVENTNewHighActor ar_Map "rActor"::rTemp "rbActor"::(rTemp.GetBaseObject)
+loop
+let aOldHighActors := aCurHighActors
+
+; EVENTCellChanged
+if eval bGetCellChanged
+	let rTemp := playerRef.GetParentCell
+	Call DispatchEvent2 EVENTCellChanged ar_Map "rOldCell"::rOldCell "rNewCell"::rTemp "bInterior"::playerRef.IsInInterior
+	let rOldCell := rTemp
+endif
+
+; EVENTWeatherChanged
+if eval rOldWeather != GetCurrentWeatherID
+	let rTemp := GetCurrentWeatherID
+	Call DispatchEvent2 EVENTWeatherChanged ar_Map "rOldWeather":: rOldWeather "rNewWeather"::rTemp "bInterior"::playerRef.IsInInterior
+	let rOldWeather := rTemp
+endif
+
+; SBVar rLastCrosshairRef
+if eval GetCrosshairRef
+	let SB.rLastCrosshairRef := GetCrosshairRef
+endif
+
+
+; EVENTPlayerBowRelease
+if eval SB.bBowDrawn ;set to 1 by event handler.
+	if eval !playerRef.IsAnimGroupPlaying "AttackBow" ; alternative method to OBSE OnRelease handler (because it may not account for denocking by script).
+		let SB.bBowDrawn := 0
+		Call DispatchEvent2 EVENTPlayerBowRelease ar_Null
+	endif
+endif
+
+; SBVars bRunning bWalking bStanding
+;SB.bSprinting is set by aaTMRunningAlong.esp
+let SB.bRunning := !(SB.bSprinting) && playerRef.IsRunning && (playerRef.IsMovingBackward || playerRef.IsMovingForward || playerRef.IsMovingLeft || playerRef.IsMovingRight)
+let SB.bWalking := !(playerRef.IsRunning) && (playerRef.IsMovingBackward || playerRef.IsMovingForward || playerRef.IsMovingLeft || playerRef.IsMovingRight)
+let SB.bStanding := !(playerRef.IsMovingBackward || playerRef.IsMovingForward || playerRef.IsMovingLeft || playerRef.IsMovingRight)
+
+; EVENTPlayerSlept
+Call CFCzFnAddressEVENTPlayerSlept
+end
+
+begin _MenuMode
+; Update Frame Variables
+let SB.iFrameCount += 1
+let SB.fFrameSecondsPassed := GetSecondsPassed
+let fQuestDelayTime := 0.0001
+
+; EVENTQuasiStartOfFrame
+if eval SB.bGameLoaded
+	Call DispatchEvent2 EVENTQuasiStartOfFrame ar_Null
+endif
+
+; MainMenuInitiations
+if eval !bPrimaryInitComplete
+	if GetGameRestarted
+		Call CFCzFnCallInitiations 0
+	endif
+	if eval (MenuMode 1044) ;MainMenu
+		Call CFCzFnCallInitiations 1
+	endif
+endif
+
+; Prevent further action during MainMenu.
+if eval !SB.bGameLoaded
+	return
+endif
+
+; Addressing Wait Entries
+Call CFCzFnAddressDelayEntries
+
+; Address MsgBoxWithHandler Entry
+if eval CF.rMsgBoxHandler
+	Call zCFAddressMsgBoxWithHandler ar_Null
+endif
+
+; EVENTPlayerSlept
+Call CFCzFnAddressEVENTPlayerSlept
+end

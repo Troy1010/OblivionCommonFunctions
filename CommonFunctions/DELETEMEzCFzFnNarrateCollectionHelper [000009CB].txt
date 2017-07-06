@@ -1,0 +1,27 @@
+scn DELETEMEzCFzFnNarrateCollectionHelper
+
+array_var cCollection
+int iRecursionLevel
+
+short bDoOnce
+array_var Iter
+string_var svReturning
+
+Begin _Function {cCollection,iRecursionLevel}
+ForEach Iter <- cCollection
+	if eval !iRecursionLevel&&!bDoOnce
+		let bDoOnce := 1
+	else
+		let svReturning := svReturning+"%r"
+	endif
+	let svReturning := svReturning+(Call zCFzIndent iRecursionLevel)+$Iter["Key"]+":"
+	if eval Call IsCollection Iter ;Proper syntax would be (&(*Iter))
+		let svReturning := svReturning+"<Collection>..   Size:"+$(ar_Size *Iter)+(Call zCFzFnNarrateCollectionHelper (*Iter),iRecursionLevel+1)
+	else
+		let svReturning := svReturning+Call Narrate Iter
+	endif
+Loop
+SetFunctionValue svReturning
+; Close
+sv_Destruct svReturning
+end

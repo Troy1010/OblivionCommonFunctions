@@ -1,0 +1,22 @@
+scn CFGetAVRoot
+;What GetAVForBaseActor *should* be, according to Common Functions
+;Returns what value the av is for the base actor without armor/baseModifiers included.
+
+ref rTarget
+short avc
+
+begin _Function { rTarget avc }
+if eval rTarget
+	if eval avc == avcEncumbrance
+		SetFunctionValue (-(rTarget.GetAVForBaseActor avcStrength)*(GetGameSetting "FActorStrengthEncumbranceMult"))
+	else
+		SetFunctionValue rTarget.GetAVForBaseActor avc
+	endif
+else
+	if eval avc == avcEncumbrance
+		SetFunctionValue (-(GetAVForBaseActor avcStrength)*(GetGameSetting "FActorStrengthEncumbranceMult"))
+	else
+		SetFunctionValue GetAVForBaseActor avc
+	endif
+endif
+end

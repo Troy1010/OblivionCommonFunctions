@@ -1,0 +1,19 @@
+scn DeleteReference2
+
+;Only disabled references can be deleted by DeleteReference.
+;This function first disables the reference, then waits 2 frames before DeleteReference.
+;If the reference form is not valid (likely because it isn't loaded), it is shunted to RAWSTREAMDeathRowRefs.
+;The references of RAWSTREAMDeathRowRefs are checked for validity on each CellChanged. If they are valid, they are deleted. If a reference has been in RAWSTREAMDeathRowRefs for longer than the CellRespawn period, it is forgotten.
+
+ref rRefToDelete
+
+begin Function { rRefToDelete }
+if IsFormValid rRefToDelete
+	if IsReference rRefToDelete
+		rRefToDelete.Disable
+		Call Wait -2 zCFWaiterDeleteReference 0 ar_List rRefToDelete ;Scripted Objects need 2 frames after Disable to be Deleted without error.
+	endif
+else
+	let CF.RAWSTREAMDeathRowRefs[GetFormIDString rRefToDelete] := GameDaysPassed
+endif
+end

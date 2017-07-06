@@ -1,0 +1,40 @@
+scn zCFzFnFilterDispatchEvent
+
+ref okEvent
+long iQH
+array_var smVariables
+
+int iDebugLevel
+int iActionCount
+
+begin Function { okEvent iQH smVariables }
+if eval !SB.nfmEvents
+	if eval Call CFDebugIsLevelMet 2
+		Call CFDebug 2 "ERROR\DispatchEvent\Unable to dispatch "+(Call NarrateForm okEvent)+" because nfmEvents is not constructed. (it initializes on PostLoad0)."
+	endif
+	SetFunctionValue 1 ;Discontinue Dispatch
+else
+	; Establish iDebugLevel
+	if eval Call CFDebugIsLevelMet 5
+		if eval ar_HasKey SB.LISTFloodingEvents GetFormIDString okEvent
+			let iDebugLevel := 6
+		else
+			let iDebugLevel := 5
+		endif
+	endif
+	; Establish iActionCount
+	if eval ar_HasKey SB.nfmEvents[GetSourceModIndex okEvent] iQH
+		let iActionCount := ar_Size SB.nfmEvents[GetSourceModIndex okEvent][iQH]
+	else
+		let iActionCount := 0
+	endif
+	;
+	if eval !iActionCount
+		SetFunctionValue 1 ;Discontinue Dispatch
+	endif
+	;
+	if eval Call CFDebugIsLevelMet iDebugLevel
+		Call CFDebug iDebugLevel "DispatchEvent\"+(Call NarrateForm okEvent)+" ActionCount:"+$iActionCount+" Vars`"+(Call NarrateCollection2 smVariables)
+	endif
+endif
+end

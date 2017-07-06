@@ -1,0 +1,26 @@
+scn CFCHandlerOpenControlMenu
+
+short iMenuID
+
+string_var svControlListPage
+float fFloat
+
+Begin _Function { iMenuID }
+; Open and Filter
+let svControlListPage := "controls_background\controls_page_2\controls_main_rect\controls_list_pane\"
+; Insert children
+InsertXMLTemplate $svControlListPage+"|controls_template|INSERTEDTEMPLATEITEM" 1021
+; Fix children
+;Index
+let fFloat := (tile_GetFloat $svControlListPage+"\childcount" 1021) -1
+tile_SetFloat $svControlListPage+"\INSERTEDTEMPLATEITEM\user0" 1021 fFloat
+;Name
+tile_SetString $svControlListPage+"\INSERTEDTEMPLATEITEM\user1|ControlName" 1021
+;Height
+;The normal 'link' to ControlMenu's default element height is broken, so we restore it here.
+let fFloat := tile_GetFloat "user1" 1021 ;user1:DefaultElementHeight
+tile_SetFloat $svControlListPage+"\INSERTEDTEMPLATEITEM\height" 1021 fFloat
+;ID
+let fFloat := 43
+tile_SetFloat $svControlListPage+"\INSERTEDTEMPLATEITEM\id" 1021 fFloat 1
+end

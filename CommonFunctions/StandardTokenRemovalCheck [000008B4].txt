@@ -1,0 +1,21 @@
+scn StandardTokenRemovalCheck
+
+; Token script example:
+;begin GameMode
+;if eval !Call IsTokenStable
+;	return
+;elseif eval Call StandardTokenRemovalCheck
+;	RemoveMe
+;endif
+;
+;<do things>
+;
+;end
+
+ref rContainer
+
+begin Function { rContainer }
+if eval rContainer.GetDead || (rContainer.GetProcessLevel >0) ;0 represents High.
+	SetFunctionValue 1
+endif
+end

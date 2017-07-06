@@ -1,0 +1,7 @@
+scn GetSelf2
+
+begin Function { }
+if eval Call IsCallingObjectStable
+	SetFunctionValue GetSelf
+endif
+end

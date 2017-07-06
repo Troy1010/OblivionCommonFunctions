@@ -1,0 +1,30 @@
+scn CFCzFnAddressDelayEntries
+
+;a2dDelayEntries. Array of aDelayEntry. 0:fTimeToWait 1:iMenuModeType 2:rAction 3:smVariables
+
+array_var Iter
+ref rTemp
+
+begin Function { }
+ForEach Iter <- ar_Copy CFC.a2dDelayEntries ;copy to avoid problems with self-erasing
+	if eval ((MenuMode)&&Iter["Value"][1]==0)||((!MenuMode)&&Iter["Value"][1]==1) ;0:GameModeOnly 1:MenuModeOnly
+		continue
+	elseif eval Iter["Value"][0] >0 ;if the timer is positive, count by seconds
+		if eval (Iter["Value"][0] -= SB.fFrameSecondsPassed) <=0
+			let Iter["Value"][0] := 0
+		endif
+	elseif eval Iter["Value"][0] < -1 ;if the timer is negative, count by frame
+		if eval (Iter["Value"][0] +=1) > -2
+			let Iter["Value"][0] := 0
+		endif
+	else ;the timer is expired
+		; Call the handler and set the entry's fTimeToWait to its return value.
+		let rTemp := Iter["Value"][2]
+		let Iter["Value"][0] := Call rTemp Iter["Value"][3]
+		; If fTimeToWait is 0, erase its entry.
+		if eval !Iter["Value"][0]
+			ar_erase CFC.a2dDelayEntries Iter["Key"]
+		endif
+	endif
+loop
+end

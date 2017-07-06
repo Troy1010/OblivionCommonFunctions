@@ -1,0 +1,23 @@
+scn DispatchEvent2
+
+;This function uses QH2, so okEvent must not be an in-game object.
+;This function is meant as an alternative to OBSE's UserDefined Events, which can cause CTD if all events are not registered on the same frame.
+
+ref okEvent ;okEvent. (ObjectKey)Event
+array_var smVariables
+
+long iQH
+array_var Iter
+
+begin Function { okEvent smVariables }
+; Open
+let iQH := Call QH2 okEvent
+; Filter
+if eval Call zCFzFnFilterDispatchEvent okEvent iQH smVariables
+	return
+endif
+; Dispatch
+ForEach Iter <- SB.nfmEvents[GetSourceModIndex okEvent][Call QH2 okEvent]
+	Call Iter["Value"] smVariables
+loop
+end

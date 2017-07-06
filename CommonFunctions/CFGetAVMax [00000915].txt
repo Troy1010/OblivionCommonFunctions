@@ -1,0 +1,27 @@
+scn CFGetAVMax
+;What GetAVMax *should* be, according to Common Functions
+;Returns what value the av is with every modifier included besides "Damage" (and 'Carried Weight' for Encumbrance).
+; Bascially, how high a stat can go through Restoration effects.
+
+ref rTarget
+short avc
+
+begin _Function { rTarget avc }
+if eval rTarget
+	if eval avc == avcDefendBonus
+		SetFunctionValue (rTarget.GetArmorRating)-(rTarget.GetAVMod avc "Damage")
+	elseif eval avc == avcEncumbrance
+		SetFunctionValue -(rTarget.GetAV avcStrength)*(GetGameSetting "FActorStrengthEncumbranceMult")+(rTarget.GetAVMod avc "Max")+(rTarget.GetAVMod avc "Script")
+	else
+		SetFunctionValue (rTarget.GetAV avc)-(rTarget.GetAVMod avc "Damage")
+	endif
+else
+	if eval avc == avcDefendBonus
+		SetFunctionValue (GetArmorRating)-(GetAVMod avc "Damage")
+	elseif eval avc == avcEncumbrance
+		SetFunctionValue -(GetAV avcStrength)*(GetGameSetting "FActorStrengthEncumbranceMult")+(GetAVMod avc "Max")+(GetAVMod avc "Script")
+	else
+		SetFunctionValue (GetAV avc)-(GetAVMod avc "Damage")
+	endif
+endif
+end

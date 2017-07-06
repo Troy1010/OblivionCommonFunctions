@@ -1,0 +1,13 @@
+scn TimestampComp3
+
+;Returns 1 if the difference between both Timestamps is within fHourRange
+
+int iDaysPassed1
+float fHour1
+int iDaysPassed2
+float fHour2
+float fHourRange
+
+Begin _Function {iDaysPassed1,fHour1,iDaysPassed2,fHour2,fHourRange}
+SetFunctionValue eval (Abs((iDaysPassed1-iDaysPassed2)*24+(fHour1-fHour2)))<fHourRange ;This calculation may become inaccurate, but it can still be trusted to evaluate correctly.
+end

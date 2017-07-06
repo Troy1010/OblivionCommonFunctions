@@ -1,0 +1,16 @@
+scn zCFQstHelperS
+
+;If this script halts because it cannot run OBSE functions, CF will remain active and send an error message.
+
+float fQuestDelayTime
+short bQuit
+
+Begin _MenuMode
+set fQuestDelayTime to 0.001
+if eval GetOBSEVersion >= 21
+	let CF.bOBSEFlag := 1
+endif
+if bQuit
+	Con_QuitGame
+endif
+end

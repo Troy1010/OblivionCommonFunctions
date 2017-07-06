@@ -1,0 +1,26 @@
+scn CFCInitActS
+
+short iInit
+short iCFDebugThreshold
+short iMasterDebugThreshold
+short bExtendFormNarration
+short bAllowCFFunctionsToEditKeyDisableStates
+
+begin _OnActivate
+	if iInit
+		let iInit := 0
+		; Default ini values
+		let iCFDebugThreshold := 2
+		let iMasterDebugThreshold := 100
+		let bExtendFormNarration := 0
+		let bAllowCFFunctionsToEditKeyDisableStates := 1
+		; Retrieve ini values
+		RunBatchScript "Data\ini\CommonFunctions.ini" 1
+		; Pass ini values
+		Call CFDebugSetModThreshold iCFDebugThreshold ;Set CFC's DebugModThreshold
+		let CF.aDebugThresholds[GetSourceModIndex zCFQstS] := iCFDebugThreshold ;Set CF's DebugModThreshold
+		let CF.iMasterDebugThreshold := iMasterDebugThreshold
+		let CF.bExtendFormNarration := bExtendFormNarration
+		let CF.bAllowCFFunctionsToEditKeyDisableStates := bAllowCFFunctionsToEditKeyDisableStates
+	endif
+end

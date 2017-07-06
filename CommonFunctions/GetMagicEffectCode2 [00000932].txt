@@ -1,0 +1,9 @@
+scn GetMagicEffectCode2
+
+;This function uses the vanilla compiler to ensure compatibility with OBME for the command.
+
+ref rMagicEffect ;aka EffectSetting
+
+begin Function { rMagicEffect }
+SetFunctionValue GetMagicEffectCode rMagicEffect
+end

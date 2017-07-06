@@ -1,0 +1,24 @@
+scn GetPosComplete
+
+;Returns an array. 0::xPos 1::yPos 2::zPos 3::fAngle 4::rParentCell
+
+ref rActor ;rActor. (Pass a null reference to use calling object)
+ref rCell
+
+begin _Function { rActor }
+if eval rActor
+	if eval rActor.IsInInterior
+		let rCell := rActor.GetParentCell
+	else
+		let rCell := rActor.GetParentWorldspace
+	endif
+	SetFunctionValue ar_List (rActor.GetPos "x") (rActor.GetPos "y") (rActor.GetPos "z") (rActor.GetAngle "z") rCell
+else
+	if eval IsInInterior
+		let rCell := GetParentCell
+	else
+		let rCell := GetParentWorldspace
+	endif
+	SetFunctionValue ar_List (GetPos "x") (GetPos "y") (GetPos "z") (GetAngle "z") rCell
+endif
+end

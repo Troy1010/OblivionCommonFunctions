@@ -1,0 +1,23 @@
+scn GetNthEffectItemActorValue2
+
+ref rEffectItem
+short sEffectItemIndex
+
+short avcReturning ;-1 represents the inability to retrieve an avc.
+long lESC ;EffectSettingCode
+
+begin _Function { rEffectItem sEffectItemIndex }
+SetFunctionValue -1
+let lESC := Call GetNthEffectItemCode2 rEffectItem sEffectItemIndex
+if eval (avcReturning := GetNthEffectItemActorValue rEffectItem sEffectItemIndex) <= 71
+	;^This will work when the ME hosts multiple AVs.
+	SetFunctionValue avcReturning
+elseif eval (avcReturning := GetMagicEffectOtherActorValue lESC) <= 71
+	;^This will work when the ME has only a single associated AV.
+	SetFunctionValue avcReturning
+elseif eval Call IsWithinRange 0 (avcReturning := Call DispatchEventWithIReturning zEVENTEffectSettingActorValueUnresolved ar_Map "lESC"::lESC) 71
+	;^This will work when the ME's ModAV handler has been replaced so there is no alloted space for
+	; an associated AV, but a child mod wants to pass one anyway.
+	SetFunctionValue avcReturning
+endif
+end

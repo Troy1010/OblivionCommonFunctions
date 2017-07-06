@@ -1,0 +1,10 @@
+scn Delay2
+
+float fSecsToWait ;fSecsToWait. Negative values will be considered frames-to-wait (ex: use -1 to execute at the begining of next frame)
+short iMenuModeType ;iMenuModeType. 0:Only GameMode 1:Only MenuMode 2:Both
+ref rHandlerFunction ;rHandlerFunction. Expected to accept an array_var argument. If SetFunctionValue is not 0, the handler will execute every frame until it is.
+array_var aVariablesToPass
+
+begin Function { fSecsToWait iMenuModeType rHandlerFunction aVariablesToPass }
+Call CFDebug 1 "The Wait function was called while CommonFunctionChild.esp was not loaded."
+end

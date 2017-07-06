@@ -1,0 +1,20 @@
+scn Delay2
+
+;This function accepts a iMenuModeType.
+
+float fSecsToWait ;fSecsToWait. Negative values will be considered frames-to-wait (ex: use -1 to execute at the begining of next frame)
+short iMenuModeType ;iMenuModeType. 0:Only GameMode 1:Only MenuMode 2:Both
+ref rHandlerFunction ;rHandlerFunction. Expected to accept an array_var argument. If SetFunctionValue is not 0, the handler will execute every frame until it is.
+array_var aVariablesToPass
+
+begin Function { fSecsToWait iMenuModeType rHandlerFunction aVariablesToPass }
+; Filter
+if eval !SB.bGameLoaded
+	if eval Call CFDebugIsLevelMet 4
+		Call CFDebug 4 "Delay2|Called before initialized."
+	endif
+	return
+endif
+; Register a DelayEntry
+ar_Append CFC.a2dDelayEntries ar_List fSecsToWait iMenuModeType rHandlerFunction aVariablesToPass
+end

@@ -1,0 +1,17 @@
+scn RemoveEventHandler2
+
+ref okEvent ;okEvent. (ObjectKey)Event
+ref rHandlerFunction
+
+Begin _Function { okEvent rHandlerFunction }
+; Filter & Debug
+if eval !ar_HasKey SB.nfmEvents[GetSourceModIndex okEvent] (Call QH okEvent)
+	if eval Call CFDebugIsLevelMet 5
+		Call CFDebug 5 "RemoveEventHandler2| was unable to remove action "+(GetFormIDString rHandlerFunction)+" because its action list does not exist."
+	endif
+	return
+endif
+
+; Remove Action from list.
+ar_Erase SB.nfmEvents[GetSourceModIndex okEvent][Call QH okEvent] (ar_Find rHandlerFunction SB.nfmEvents[GetSourceModIndex okEvent][Call QH okEvent])
+end

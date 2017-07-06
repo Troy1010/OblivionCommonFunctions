@@ -1,0 +1,35 @@
+scn DELETEMEArNarrateArray2
+
+array_var aArray
+string_var svText ;svArrayTitle(optional)
+long iKeyCountLimit
+
+array_var Iter
+
+Begin _Function { svText iKeyCountLimit aArray }
+; Filter and Open
+if eval (sv_Length svText) == -1
+	sv_Construct svText
+else
+	let svText := svText+"`"
+endif
+let aArray := Call TryCreate aArray 0
+; Create svText
+ForEach Iter <- aArray
+	if eval (iKeyCountLimit-=1) < 0
+		break
+	endif
+	if eval Iter["Key"] != ar_First aArray
+		let svText += "`"
+	endif
+	let svText += $Iter["Key"]+":"
+	if eval (TypeOf *Iter) == "Form"
+		let svText += Call NarrateForm *Iter
+	else
+		let svText += $*Iter
+	endif
+loop
+SetFunctionValue svText
+; Close
+sv_Destruct svText
+end

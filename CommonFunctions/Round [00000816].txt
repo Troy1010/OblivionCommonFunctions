@@ -1,0 +1,13 @@
+scn Round
+
+float fFloat
+
+begin _Function { fFloat }
+if eval (fFloat - (floor fFloat)) < 0.5
+	SetFunctionValue floor fFloat
+	return
+else
+	SetFunctionValue ceil fFloat
+	return
+endif
+end

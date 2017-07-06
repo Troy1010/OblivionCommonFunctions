@@ -1,0 +1,10 @@
+scn CFCHandlerSaveGame
+
+string_var svSaveFileName
+array_var aRuntimeSaveNames
+
+begin Function { svSaveFileName }
+let aRuntimeSaveNames := Call GetCFLocalData OKRuntimeSaveNames
+ar_Append aRuntimeSaveNames svSaveFileName
+Call SetCFLocalData OKRuntimeSaveNames aRuntimeSaveNames
+end

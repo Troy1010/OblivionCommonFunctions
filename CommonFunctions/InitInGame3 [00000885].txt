@@ -1,0 +1,29 @@
+scn InitInGame3
+; Call this in a Function script with form ID xx000800.
+
+; Example usage:
+;scn InitiationFunctionWithFormIDxx000800
+;Begin Function { }
+;if eval Call InitGameLoad2
+;	<Do things>
+;endif
+;end
+
+; Defining terms:
+;>InitOnStart
+;Once on the first frame of MainMenu.
+;UniversalData (aka SetEventHandlers, GameSettings, etc) is recommended to be set here.
+;>InitGameLoad
+;Every PostLoad/NewGame.
+;SaveData (aka QuestVariables) is recommended to be set here.
+;>InitMainMenu
+;Every MainMenu.
+;SaveData that is expected to exist during the MainMenu is recommended to be set here.
+;*If SaveData is set in InitGameLoad&InitMainMenu, it can be expected to always exist.
+;>InitInGame
+;Every PostLoad/NewGame, after references are stable.
+;Reference edits (Adding tokens, etc) are recommended here.
+
+begin Function { }
+SetFunctionValue eval CF.bCallingInGameInitiations && CF.iInitiationIndex ==3
+end
