@@ -39,6 +39,9 @@ short bOBSEFlag
 short bAllowCFFunctionsToEditKeyDisableStates
 array_var qfmControls
 
+; GetQuestVariable2
+float fPassing
+
 
 ;This quest mainly exists to store variables.
 ;This block warns about missing dependencies that prevent traditional debugging.

@@ -1,0 +1,12 @@
+scn GetQuestVariable2F
+
+;Warning: Conflict prone when two quests have the same name.
+;This function allows for quest variable retrieval without using the mod as a master.
+;To set a quest variable with the same freedom, use RunScriptLine "set Qst.Var to #"
+
+string_var sQuestDotVariableName ;EX: Qst.fVariable
+
+Begin _Function { sQuestDotVariableName }
+RunScriptLine "set CF.fPassing to " +$sQuestDotVariableName
+SetFunctionValue CF.fPassing
+end

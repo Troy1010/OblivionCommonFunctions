@@ -1,36 +1,38 @@
 scn Handle2
 
+;Passes variables into handler
+
 ref rHandler
 ref rAction
-array_var aArgs
+array_var aActionArgs
 
 short iSize
 
-begin _Function { rHandler rAction aArgs }
-let iSize := ar_Size aArgs
-If eval Call rHandler rAction aArgs
+begin _Function { rHandler rAction aActionArgs }
+let iSize := ar_Size aActionArgs
+If eval Call rHandler rAction aActionArgs
 	if eval (iSize==-1)||(iSize==0)
 		Call rAction
 	elseif eval iSize==1
-		Call rAction aArgs[0]
+		Call rAction aActionArgs[0]
 	elseif eval iSize==2
-		Call rAction aArgs[0] aArgs[1]
+		Call rAction aActionArgs[0] aActionArgs[1]
 	elseif eval iSize==3
-		Call rAction aArgs[0] aArgs[1] aArgs[2]
+		Call rAction aActionArgs[0] aActionArgs[1] aActionArgs[2]
 	elseif eval iSize==4
-		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3]
+		Call rAction aActionArgs[0] aActionArgs[1] aActionArgs[2] aActionArgs[3]
 	elseif eval iSize==5
-		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3] aArgs[4]
+		Call rAction aActionArgs[0] aActionArgs[1] aActionArgs[2] aActionArgs[3] aActionArgs[4]
 	elseif eval iSize==6
-		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3] aArgs[4] aArgs[5]
+		Call rAction aActionArgs[0] aActionArgs[1] aActionArgs[2] aActionArgs[3] aActionArgs[4] aActionArgs[5]
 	elseif eval iSize==7
-		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3] aArgs[4] aArgs[5] aArgs[6]
+		Call rAction aActionArgs[0] aActionArgs[1] aActionArgs[2] aActionArgs[3] aActionArgs[4] aActionArgs[5] aActionArgs[6]
 	elseif eval iSize==8
-		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3] aArgs[4] aArgs[5] aArgs[6] aArgs[7]
+		Call rAction aActionArgs[0] aActionArgs[1] aActionArgs[2] aActionArgs[3] aActionArgs[4] aActionArgs[5] aActionArgs[6] aActionArgs[7]
 	elseif eval iSize==9
-		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3] aArgs[4] aArgs[5] aArgs[6] aArgs[7] aArgs[8]
+		Call rAction aActionArgs[0] aActionArgs[1] aActionArgs[2] aActionArgs[3] aActionArgs[4] aActionArgs[5] aActionArgs[6] aActionArgs[7] aActionArgs[8]
 	else
-		Call rAction aArgs[0] aArgs[1] aArgs[2] aArgs[3] aArgs[4] aArgs[5] aArgs[6] aArgs[7] aArgs[8] aArgs[9]
+		Call rAction aActionArgs[0] aActionArgs[1] aActionArgs[2] aActionArgs[3] aActionArgs[4] aActionArgs[5] aActionArgs[6] aActionArgs[7] aActionArgs[8] aActionArgs[9]
 	endif
 endif
 end
